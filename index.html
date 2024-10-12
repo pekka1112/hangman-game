@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman Game</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="script/wordList.js" defer></script>
+    <script src="script/script.js" defer></script>
+
+</head>
+<body>
+
+    <div class="game-modal">
+        <div class="content">
+            <img src="img/lost.gif" alt="gif">
+            <h4>"Result!"</h4>
+            <p>Bạn đã tìm thấy từ: <b>"key word"</b></p>
+            <button class="play-again">Chơi lại</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hangman-box">
+            <img src="img/hangman-0.svg" alt="hangman-img">
+            <h1>Hangman Game</h1>
+         </div>
+
+         <div class="game-box">
+            <ul class="word-display">
+                <!-- <li class="letter"></li>
+                <li class="letter"></li>
+                <li class="letter guessed">a</li>
+                <li class="letter"></li>
+                <li class="letter"></li>
+                <li class="letter"></li>
+                <li class="letter"></li> -->
+            </ul>
+            <h4 class="hint-text">
+                Gợi ý: <b>"Hint"</b>
+            </h4>
+            <h4 class="guesses-text">
+               Suy đoán không chính xác: <b>0 / 6</b>
+            </h4>
+            <div class="keyboard">
+                <!-- implement button keyboard-->
+            </div>
+         </div>
+    </div>
+
+    
+
+
+    
+</body>
+</html>
