@@ -6,6 +6,7 @@ let currentWord, correctLetters = [], wrongGuessCount = 0;
 const maxGuesses = 6;
 const gameModal = document.querySelector(".game-modal");
 const playAgainBtn = document.querySelector(".play-again");
+
 const resetGame = () => {
     correctLetters = [];
     wrongGuessCount = 0;
@@ -14,14 +15,18 @@ const resetGame = () => {
     keyboardDiv.querySelectorAll("button").forEach(button => button.disabled = false);
     wordDisplay.querySelectorAll("li").forEach(li => li.innerText = "");
     gameModal.classList.remove("show");
+    startTimer();
 }
 const getRandomWord = () => {
+    clearInterval(timer); 
     const {word, hint} = wordList[Math.floor(Math.random() * wordList.length)];
     currentWord = word;
     console.log(word, hint);
     document.querySelector(".hint-text b").innerText = hint;
     resetGame();
+
     wordDisplay.innerHTML = word.split('').map(() => `<li class="letter"></li>`).join('');
+   
 }
 const initGame = (button, clickedLetter) => {
     if(currentWord.includes(clickedLetter)){
@@ -50,6 +55,7 @@ for (let i = 97; i <= 122; i++) {
     button.addEventListener("click", e => initGame(e.target, String.fromCharCode(i)));
 }
 const gameOver = (isWin) => { 
+    clearInterval(timer)
     setTimeout(() => {
         const modalText = isWin ? "Bạn đã tìm thấy từ:" : "Từ đúng là:";
         gameModal.querySelector("img").src = `img/${isWin ? "victory" : "lost"}.gif`;
