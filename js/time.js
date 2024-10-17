@@ -1,5 +1,7 @@
 let timer; 
-timeLeft = 180; 
+const dataConfig = JSON.parse(localStorage.getItem("configData"));
+// let timeLeft = dataConfig.timeLimit * 60; 
+let timeLeft = 180;
 function startTimer() {
     timeLeft = 180; 
     updateTimerDisplay(); 

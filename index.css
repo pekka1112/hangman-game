@@ -196,7 +196,26 @@ body {
     padding: 12px 23px;
 
 }
-
+.btn-result{
+    position: fixed;
+    top: 0;
+    right: 0;
+    background: #5E63BA;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    border-radius: 4px;
+    text-transform: uppercase;
+    margin-top: 20px;
+    margin-right: 20px;
+}
+.btn-result:hover{
+    background: #8286c9;
+    color: white;
+}
 @media(max-width: 728px) {
     .container {
         flex-direction: column;

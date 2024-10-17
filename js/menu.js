@@ -1,5 +1,20 @@
 
 $(document).ready(function(){
+    function setConfigData(){
+        const configData = {
+            timeLimit: $('#limitedTime').val(),
+            teamNumber: $('#teamNumber').val()
+        }
+        localStorage.setItem("configData", JSON.stringify(configData));
+    }
+    function setTeamsInfo(){
+        const teams = [];
+        for (let i = 0; i < parseInt($('#teamNumber').val()); i++) {
+            const teamName = $(`#teamName${i}`).val();
+            teams.push({name: teamName, roundsPlayed: 0, score: 0});
+        }
+        localStorage.setItem("teamsData", JSON.stringify(teams));
+    }
     let currentPage = 1;
     $('#nextBtn').on('click', function(){
         if(currentPage === 1){
@@ -7,8 +22,10 @@ $(document).ready(function(){
             $('#page-two').removeClass('d-none');
             $('#backBtn').removeClass('d-none');
             $('#nextBtn').text('Xác nhận');
+            setConfigData();
             currentPage++;
         }else{
+            setTeamsInfo();
             $('#configurationModal').modal('hide');
         }
     });
@@ -42,4 +59,6 @@ $(document).ready(function() {
     }).blur(function() {
         $(this).prev('label').removeClass('label-focus');
     });
+    
 });
+
