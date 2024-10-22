@@ -121,8 +121,8 @@
             let word = $(this).data('id');
             if (confirm("Bạn có chắc muốn xoá từ này không? Thông tin sau khi xoá sẽ không thể phục hồi lại được.")) {
                 $.ajax({
-                    url: "./action/delete.php?word=" + encodeURIComponent(word),
-                    type: 'DELETE',
+                    url: "./action/delete.php?word=" + word,
+                    type: "GET",
                     success: function (response) {
                         $('#status').html("<b>Xoá từ thành công!</b>");
                         $('#status').removeClass('text-danger');
@@ -130,7 +130,8 @@
                         table.ajax.reload();
                     },
                     error: function (xhr, status, error) {
-                        $('#status').html("<b>Xoá từ không thành công!</b>");
+                        const response = JSON.parse(xhr.responseText);
+                        $('#status').html("<b>Xóa từ không thành công!</b> (" + response.error + ")");
                         $('#status').removeClass('text-success');
                         $('#status').addClass('text-danger');
                     }

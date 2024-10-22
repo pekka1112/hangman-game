@@ -2,7 +2,7 @@
     header("Access-Control-Allow-Origin: *");
     header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
     header("Access-Control-Allow-Headers: Content-Type, Authorization");
-    header('Content-Type: application/json; charset=utf-8');
+    header("Content-Type: application/json; charset=utf-8");
     // kết nối file dữ liệu
     require_once "../fileConfig.php";
     // kiểm tra phương thức yêu cầu có phải là POST không

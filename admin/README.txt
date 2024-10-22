@@ -10,4 +10,6 @@
 5. Chạy dbConfig.php trước khi khởi chạy chương trình.
 
 * Link API:
-GET: /admin/wordset/get.php
+GET: /admin/action/get.php
+POST: /admin/action/insert.php
+DELETE: /admin/action/delete.php
