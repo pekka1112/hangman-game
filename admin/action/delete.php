@@ -10,7 +10,7 @@
         exit;
     }
     // kết nối CSDL và thông tin các class
-    require_once "../dbConfig.php";
+    require_once "../fileConfig.php";
 
     // kiểm tra phương thức yêu cầu có phải là DELETE không
     if($_SERVER["REQUEST_METHOD"] === "DELETE") {

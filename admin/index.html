@@ -44,7 +44,7 @@
     $(document).ready(function () {
         const table = $('#data-table').DataTable({
             "ajax": {
-                "url": "./wordset/get.php",
+                "url": "./action/get.php",
                 "dataSrc": "",
                 "type": "GET"
             },
@@ -96,7 +96,7 @@
                     hint: hint,
                 };
                 $.ajax({
-                    url: './wordset/insert.php',
+                    url: './action/insert.php',
                     type: 'POST',
                     data: formData,
                     success: function(response) {
@@ -106,7 +106,8 @@
                         table.ajax.reload();
                     },
                     error: function(xhr, status, error) {
-                        $('#status').html("<b>Thêm không thành công!</b> (Từ có thể đã tồn tại trong hệ thống)");
+                        const response = JSON.parse(xhr.responseText);
+                        $('#status').html("<b>Thêm không thành công!</b> (" + response.error + ")");
                         $('#status').removeClass('text-success');
                         $('#status').addClass('text-danger');
                     }
@@ -120,7 +121,7 @@
             let word = $(this).data('id');
             if (confirm("Bạn có chắc muốn xoá từ này không? Thông tin sau khi xoá sẽ không thể phục hồi lại được.")) {
                 $.ajax({
-                    url: "./wordset/delete.php?word=" + encodeURIComponent(word),
+                    url: "./action/delete.php?word=" + encodeURIComponent(word),
                     type: 'DELETE',
                     success: function (response) {
                         $('#status').html("<b>Xoá từ thành công!</b>");
