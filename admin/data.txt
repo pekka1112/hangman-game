@@ -1,0 +1,65 @@
+guitar	A musical instrument with strings.
+oxygen	A colorless, odorless gas essential for life.
+mountain	A large natural elevation of the Earth's surface.
+painting	An art form using colors on a surface to create images or expression.
+astronomy	The scientific study of celestial objects and phenomena.
+football	A popular sport played with a spherical ball.
+chocolate	A sweet treat made from cocoa beans.
+butterfly	An insect with colorful wings and a slender body.
+history	The study of past events and human civilization.
+pizza	A savory dish consisting of a round, flattened base with toppings.
+jazz	A genre of music characterized by improvisation and syncopation.
+camera	A device used to capture and record images or videos.
+diamond	A precious gemstone known for its brilliance and hardness.
+adventure	An exciting or daring experience.
+science	The systematic study of the structure and behavior of the physical and natural world.
+bicycle	A human-powered vehicle with two wheels.
+sunset	The daily disappearance of the sun below the horizon.
+coffee	A popular caffeinated beverage made from roasted coffee beans.
+dance	A rhythmic movement of the body often performed to music.
+galaxy	A vast system of stars, gas, and dust held together by gravity.
+orchestra	A large ensemble of musicians playing various instruments.
+volcano	A mountain or hill with a vent through which lava, rock fragments, hot vapor, and gas are ejected.
+novel	A long work of fiction, typically with a complex plot and characters.
+sculpture	A three-dimensional art form created by shaping or combining materials.
+symphony	A long musical composition for a full orchestra, typically in multiple movements.
+architecture	The art and science of designing and constructing buildings.
+ballet	A classical dance form characterized by precise and graceful movements.
+astronaut	A person trained to travel and work in space.
+waterfall	A cascade of water falling from a height.
+technology	The application of scientific knowledge for practical purposes.
+rainbow	A meteorological phenomenon that is caused by reflection, refraction, and dispersion of light.
+universe	All existing matter, space, and time as a whole.
+piano	A musical instrument played by pressing keys that cause hammers to strike strings.
+vacation	A period of time devoted to pleasure, rest, or relaxation.
+rainforest	A dense forest characterized by high rainfall and biodiversity.
+theater	A building or outdoor area in which plays, movies, or other performances are staged.
+telephone	A device used to transmit sound over long distances.
+language	A system of communication consisting of words, gestures, and syntax.
+desert	A barren or arid land with little or no precipitation.
+sunflower	A tall plant with a large yellow flower head.
+fantasy	A genre of imaginative fiction involving magic and supernatural elements.
+telescope	An optical instrument used to view distant objects in space.
+oasis	A fertile spot in a desert where water is found.
+photography	The art, process, or practice of creating images by recording light or other electromagnetic radiation.
+safari	An expedition or journey, typically to observe wildlife in their natural habitat.
+planet	A celestial body that orbits a star and does not produce light of its own.
+river	A large natural stream of water flowing in a channel to the sea, a lake, or another such stream.
+tropical	Relating to or situated in the region between the Tropic of Cancer and the Tropic of Capricorn.
+mysterious	Difficult or impossible to understand, explain, or identify.
+enigma	Something that is mysterious, puzzling, or difficult to understand.
+paradox	A statement or situation that contradicts itself or defies intuition.
+puzzle	A game, toy, or problem designed to test ingenuity or knowledge.
+whisper	To speak very softly or quietly, often in a secretive manner.
+shadow	A dark area or shape produced by an object blocking the light.
+secret	Something kept hidden or unknown to others.
+curiosity	A strong desire to know or learn something.
+unpredictable	Not able to be foreseen or known beforehand; uncertain.
+obfuscate	To confuse or bewilder someone; to make something unclear or difficult to understand.
+unveil	To make known or reveal something previously secret or unknown.
+illusion	A false perception or belief; a deceptive appearance or impression.
+moonlight	The light from the moon.
+vibrant	Full of energy, brightness, and life.
+nostalgia	A sentimental longing or wistful affection for the past.
+brilliant	Exceptionally clever, talented, or impressive.
+xin chào	chao xìn

@@ -11,12 +11,31 @@
 <body>
 <div class="container">
     <div class="row mt-3 mb-3">
-        <div class="col-2 d-flex align-items-center"><a href="#">Quay lại</a></div>
+        <div class="col-2 d-flex align-items-center">
+            <a href="../index.html" class="link-underline link-underline-opacity-0">
+                <button type="button" class="btn btn-outline-secondary">Quay lại</button>
+            </a>
+        </div>
         <div class="col-8 text-center">
             <p class="h2">Hangman Game</p>
         </div>
     </div>
     <div class="row mt-3 mb-3">
+        <div class="col-12">
+            <p><strong>Công cụ:</strong></p>
+            <p id="upload-status" class="text-center text-danger"></p>
+            <div class="d-flex justify-content-center flex-wrap">
+                <form id="upload-file-form" action="tool/importTxt.php" method="post" enctype="multipart/form-data">
+                    <input type="file" id="file-input" name="fileInput" accept=".txt" style="display: none"/>
+                    <button type="button" id="btn-file" class="btn btn-outline-primary m-3">Thêm dữ liệu (.txt)</button>
+                </form>
+                <button type="button" id="btn-download" class="btn btn-outline-primary m-3">Xuất dữ liệu (.txt)</button>
+                <button type="button" id="btn-delete-all" class="btn btn-outline-danger m-3">Xóa toàn bộ</button>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3 mb-3">
+        <p><strong>Thêm từ mới:</strong></p>
         <p id="status" class="text-center text-danger"></p>
         <div class="col-3">
             <input type="text" class="form-control" name="word" id="word" placeholder="Nhập từ bí ẩn"/>
@@ -27,10 +46,11 @@
             <p id="hint-error" class="text-danger text-center"></p>
         </div>
         <div class="col-3">
-            <button type="button" id="btn-add" class="btn btn-success form-control">Thêm</button>
+            <button type="button" id="btn-add" class="btn btn-primary form-control">Thêm</button>
         </div>
     </div>
     <div class="row">
+        <p><strong>Danh sách từ bí ẩn:</strong></p>
         <table id="data-table" class="table table-striped table-bordered">
             <thead></thead>
             <tbody></tbody>
@@ -42,9 +62,59 @@
 <script src="https://cdn.datatables.net/v/bs5/dt-2.1.3/datatables.min.js"></script>
 <script>
     $(document).ready(function () {
+        // xử lý sự kiện chọn file
+        $("#btn-file").on("click", function() {
+            $("#file-input").trigger("click");
+        });
+        $("#file-input").on("change", function(){
+            let file = this.files[0];
+            if(file) {
+                // lấy phần mở rộng của file
+                let fileExtension = file.name.split('.').pop().toLowerCase(); // tách và lấy phần mở rộng
+                // kiểm tra phần mở rộng có phải là .txt không
+                if (fileExtension === "txt") {
+                    $("#upload-file-form").submit(); // gửi form nếu file có phần mở rộng .txt
+                } else {
+                    alert("Hệ thống chỉ nhận file .txt"); // hiển thị thông báo nếu không đúng định dạng
+                }
+            }
+        });
+
+        // kiểm tra trạng thái upload file
+        const params = new URLSearchParams(window.location.search);
+        const uploadStatus = params.get("uploadStatus");
+        if(uploadStatus) {
+            const status = $("#upload-status");
+            if(uploadStatus.startsWith("success")) {
+                const statusArr = uploadStatus.split("_");
+                status.html("Nhận file thành công. Tổng cộng có " + statusArr[1] + " từ mới được thêm vào");
+                status.removeClass('text-danger');
+                status.addClass('text-success');
+            } else if(uploadStatus === "sourceError") {
+                status.html("Hệ thống không truy xuất được file nguồn");
+                status.removeClass('text-success');
+                status.addClass('text-danger');
+            } else if(uploadStatus === "fileError") {
+                status.html("Hệ thống không nhận được file tải lên hoặc file tải lên bị lỗi");
+                status.removeClass('text-success');
+                status.addClass('text-danger');
+            }
+        }
+
+        // xử lý sự kiện tải file
+        $("#btn-download").on("click", function() {
+           const link = document.createElement("a");
+           link.href = "data.txt";
+           link.download = "data.txt";
+           document.body.appendChild(link);
+           link.click();
+           document.body.removeChild(link);
+        });
+
+        // khởi tạo datatable
         const table = $('#data-table').DataTable({
             "ajax": {
-                "url": "./wordset/get.php",
+                "url": "./action/get.php",
                 "dataSrc": "",
                 "type": "GET"
             },
@@ -96,7 +166,7 @@
                     hint: hint,
                 };
                 $.ajax({
-                    url: './wordset/insert.php',
+                    url: './action/insert.php',
                     type: 'POST',
                     data: formData,
                     success: function(response) {
@@ -106,7 +176,8 @@
                         table.ajax.reload();
                     },
                     error: function(xhr, status, error) {
-                        $('#status').html("<b>Thêm không thành công!</b> (Từ có thể đã tồn tại trong hệ thống)");
+                        const response = JSON.parse(xhr.responseText);
+                        $('#status').html("<b>Thêm không thành công!</b> (" + response.error + ")");
                         $('#status').removeClass('text-success');
                         $('#status').addClass('text-danger');
                     }
@@ -120,8 +191,8 @@
             let word = $(this).data('id');
             if (confirm("Bạn có chắc muốn xoá từ này không? Thông tin sau khi xoá sẽ không thể phục hồi lại được.")) {
                 $.ajax({
-                    url: "./wordset/delete.php?word=" + encodeURIComponent(word),
-                    type: 'DELETE',
+                    url: "./action/delete.php?word=" + word,
+                    type: "GET",
                     success: function (response) {
                         $('#status').html("<b>Xoá từ thành công!</b>");
                         $('#status').removeClass('text-danger');
@@ -129,7 +200,8 @@
                         table.ajax.reload();
                     },
                     error: function (xhr, status, error) {
-                        $('#status').html("<b>Xoá từ không thành công!</b>");
+                        const response = JSON.parse(xhr.responseText);
+                        $('#status').html("<b>Xóa từ không thành công!</b> (" + response.error + ")");
                         $('#status').removeClass('text-success');
                         $('#status').addClass('text-danger');
                     }
