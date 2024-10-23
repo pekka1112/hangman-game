@@ -1,13 +1,19 @@
 <?php
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Methods: POST, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization");
+    header("Content-Type: application/json; charset=utf-8");
     // kết nối file dữ liệu
     require_once "../fileConfig.php";
     if(isset($filePath)) {
         if($filePath === false) {
-            header("Location: ../index.html?uploadStatus=sourceError");
+            http_response_code(500);
+            echo json_encode(["error" => "Không tìm thấy file nguồn"]);
             exit;
         }
     } else {
-        header("Location: ../index.html?uploadStatus=sourceError");
+        http_response_code(500);
+        echo json_encode(["error" => "Không tìm thấy file nguồn"]);
         exit;
     }
     $fileContent = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
@@ -28,14 +34,17 @@
                     $count++;
                 }
             }
-            header("Location: ../index.html?uploadStatus=success_" . $count);
+            http_response_code(200);
+            echo json_encode(["count" => $count]);
             exit;
         } else {
-            header("Location: ../index.html?uploadStatus=fileError");
+            http_response_code(400);
+            echo json_encode(["error" => "Không nhận được file tải lên hoặc file tải lên không hợp lệ"]);
             exit;
         }
     } else {
-        header("Location: ../index.html?uploadStatus=fileError");
+        http_response_code(400);
+        echo json_encode(["error" => "Không nhận được file tải lên hoặc file tải lên không hợp lệ"]);
         exit;
     }
 
