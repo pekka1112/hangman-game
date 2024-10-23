@@ -1,43 +1,41 @@
 <?php
     header("Access-Control-Allow-Origin: *");
-    header("Access-Control-Allow-Methods: DELETE, OPTIONS");
+    header("Access-Control-Allow-Methods: GET, OPTIONS");
     header("Access-Control-Allow-Headers: Content-Type, Authorization");
-    header('Content-Type: application/json; charset=utf-8');
-
-    // Xử lý yêu cầu OPTIONS
-    if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
-        http_response_code(200);
-        exit;
-    }
-    // kết nối CSDL và thông tin các class
+    header("Content-Type: application/json; charset=utf-8");
+    // kết nối file dữ liệu
     require_once "../fileConfig.php";
-
     // kiểm tra phương thức yêu cầu có phải là DELETE không
-    if($_SERVER["REQUEST_METHOD"] === "DELETE") {
+    if($_SERVER["REQUEST_METHOD"] === "GET") {
         // kiểm tra tham số có được truyền không
         if(isset($_GET["word"])) {
-            // var
-            $word = $_GET["word"];
-            // sql
-            $sql = "DELETE FROM wordset WHERE word = ?";
-            if (isset($connect)) {
-                $stmt = $connect->prepare($sql);
-            }
-            // bind param
-            $stmt->bind_param("s", $word);
-            if($stmt->execute()) {  // nếu có thể truy vấn, tiến hành delete
-                http_response_code(200);
-                echo json_encode(array("message" => "Truy vấn thành công."));
-            } else {    // thông báo lỗi nếu không thể thực hiện truy vấn
+            if (isset($filePath)) { // kiểm tra có biến filePath không
+                if($filePath !== false) {   // kiểm tra filePath có hợp lệ
+                    $deletedWord = $_GET["word"];
+                    $fileContent = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+                    // lọc ra những từ không phải từ bị xóa
+                    $fileContent = array_filter($fileContent, function ($line) use ($deletedWord) {
+                       list($word, $hint) = explode("\t", $line);
+                       return $word !== $deletedWord;
+                    });
+                    // thêm lại vào file
+                    file_put_contents($filePath, implode("\n", $fileContent));
+                    http_response_code(200);
+                    echo json_encode(["message" => "Xóa thành công"], JSON_PRETTY_PRINT);
+                } else {
+                    http_response_code(500);
+                    echo json_encode(["error" => "Không tìm thấy file nguồn"], JSON_PRETTY_PRINT);
+                }
+            } else {
                 http_response_code(500);
-                echo json_encode(array("message" => "Lỗi trong quá trình thực hiện truy vấn."));
+                echo json_encode(["error" => "Không kết nối được với file cài đặt"], JSON_PRETTY_PRINT);
             }
-        } else {    // thông báo lỗi nếu có tham số không được truyền
+        } else {
             http_response_code(400);
-            echo json_encode(array("message" => "Thiếu tham số."));
+            echo json_encode(["error" => "Thiếu tham số đầu vào"], JSON_PRETTY_PRINT);
         }
-    } else {    // thông báo lỗi nếu phương thức yêu cầu không phải DELETE
-        http_response_code(405);
-        echo json_encode(array("message" => "Phương thức không được hỗ trợ."));
+    } else {
+        http_response_code(400);
+        echo json_encode(["error" => "Phương thức không được hỗ trợ"], JSON_PRETTY_PRINT);
     }
 ?>

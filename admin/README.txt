@@ -10,6 +10,6 @@
 5. Chạy dbConfig.php trước khi khởi chạy chương trình.
 
 * Link API:
-GET: /admin/action/get.php
-POST: /admin/action/insert.php
-DELETE: /admin/action/delete.php
+Lấy danh sách từ (GET): /admin/action/get.php
+Thêm từ mới (POST): /admin/action/insert.php
+Xóa từ (GET): /admin/action/delete.php
