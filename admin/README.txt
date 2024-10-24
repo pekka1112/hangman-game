@@ -14,3 +14,4 @@ Lấy danh sách từ (GET): /admin/action/get.php
 Thêm từ mới (POST): /admin/action/insert.php
 Xóa từ (GET): /admin/action/delete.php
 Thêm file dữ liệu (POST): /admin/tool/importTxt.php
+Xóa toàn bộ dữ liệu (POST): /admin/tool/deleteAll.php
