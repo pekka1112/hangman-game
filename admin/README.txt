@@ -13,5 +13,5 @@
 Lấy danh sách từ (GET): /admin/action/get.php
 Thêm từ mới (POST): /admin/action/insert.php
 Xóa từ (GET): /admin/action/delete.php
-
-* Lưu ý: Hệ thống có thể bị lỗi với 1 số extension của trình duyệt do đó phải đảm bảo chức năng quản lý được chạy trong môi trường không có extension của trình duyệt.
+Thêm file dữ liệu (POST): /admin/tool/importTxt.php
+Xóa toàn bộ dữ liệu (POST): /admin/tool/deleteAll.php

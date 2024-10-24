@@ -23,7 +23,7 @@
     <div class="row mt-3 mb-3">
         <div class="col-12">
             <p><strong>Công cụ:</strong></p>
-            <p id="upload-status" class="text-center text-danger"></p>
+            <p id="tool-status" class="text-center text-danger"></p>
             <div class="d-flex justify-content-center flex-wrap">
                 <form id="upload-file-form" action="tool/importTxt.php" method="post" enctype="multipart/form-data">
                     <input type="file" id="file-input" name="fileInput" accept=".txt" style="display: none"/>
@@ -62,45 +62,6 @@
 <script src="https://cdn.datatables.net/v/bs5/dt-2.1.3/datatables.min.js"></script>
 <script>
     $(document).ready(function () {
-        // xử lý sự kiện chọn file
-        $("#btn-file").on("click", function() {
-            $("#file-input").trigger("click");
-        });
-        $("#file-input").on("change", function(){
-            let file = this.files[0];
-            if(file) {
-                // lấy phần mở rộng của file
-                let fileExtension = file.name.split('.').pop().toLowerCase(); // tách và lấy phần mở rộng
-                // kiểm tra phần mở rộng có phải là .txt không
-                if (fileExtension === "txt") {
-                    $("#upload-file-form").submit(); // gửi form nếu file có phần mở rộng .txt
-                } else {
-                    alert("Hệ thống chỉ nhận file .txt"); // hiển thị thông báo nếu không đúng định dạng
-                }
-            }
-        });
-
-        // kiểm tra trạng thái upload file
-        const params = new URLSearchParams(window.location.search);
-        const uploadStatus = params.get("uploadStatus");
-        if(uploadStatus) {
-            const status = $("#upload-status");
-            if(uploadStatus.startsWith("success")) {
-                const statusArr = uploadStatus.split("_");
-                status.html("Nhận file thành công. Tổng cộng có " + statusArr[1] + " từ mới được thêm vào");
-                status.removeClass('text-danger');
-                status.addClass('text-success');
-            } else if(uploadStatus === "sourceError") {
-                status.html("Hệ thống không truy xuất được file nguồn");
-                status.removeClass('text-success');
-                status.addClass('text-danger');
-            } else if(uploadStatus === "fileError") {
-                status.html("Hệ thống không nhận được file tải lên hoặc file tải lên bị lỗi");
-                status.removeClass('text-success');
-                status.addClass('text-danger');
-            }
-        }
-
         // xử lý sự kiện tải file
         $("#btn-download").on("click", function() {
            const link = document.createElement("a");
@@ -189,7 +150,7 @@
         table.on('click', '.delete-btn', function (e) {
             e.preventDefault();
             let word = $(this).data('id');
-            if (confirm("Bạn có chắc muốn xoá từ này không? Thông tin sau khi xoá sẽ không thể phục hồi lại được.")) {
+            if (confirm("Bạn có chắc muốn xoá từ này không? Thông tin sau khi xoá sẽ không thể phục hồi.")) {
                 $.ajax({
                     url: "./action/delete.php?word=" + word,
                     type: "GET",
@@ -207,6 +168,72 @@
                     }
                 });
             };
+        });
+
+        // xử lý sự kiện thêm file dữ liệu
+        $("#btn-file").on("click", function() {
+            $("#file-input").trigger("click");
+        });
+        $("#file-input").on("change", function(){
+            let file = this.files[0];
+            if(file) {
+                // lấy phần mở rộng của file
+                let fileExtension = file.name.split('.').pop().toLowerCase(); // tách và lấy phần mở rộng
+                // kiểm tra phần mở rộng có phải là .txt không
+                if (fileExtension === "txt") {
+                    $("#upload-file-form").submit(); // gửi form nếu file có phần mở rộng .txt
+                } else {
+                    alert("Hệ thống chỉ nhận file .txt"); // hiển thị thông báo nếu không đúng định dạng
+                }
+            }
+        });
+        $("#upload-file-form").on("submit", function (e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            const status = $("#tool-status");
+            $.ajax({
+                url: "./tool/importTxt.php",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    status.html("<b>Nhận file thành công </b> (Tổng cộng có " + response.count + " từ mới được thêm vào)");
+                    status.removeClass('text-danger');
+                    status.addClass('text-success');
+                    table.ajax.reload();
+                },
+                error: function (xhr, stt, error) {
+                    const response = JSON.parse(xhr.responseText);
+                    status.html("<b>" + response.error + "</b>");
+                    status.removeClass('text-success');
+                    status.addClass('text-danger');
+                }
+            });
+        });
+
+        // xử lý sự kiện xóa toàn bộ file dữ liệu
+        $("#btn-delete-all").on("click", function(e) {
+            e.preventDefault();
+            const status = $("#tool-status");
+            if(confirm("Bạn có chắc muốn xóa toàn bộ file dữ liệu không? Dữ liệu sau khi xóa sẽ không thể phục hồi.")) {
+                $.ajax({
+                    url: "./tool/deleteAll.php",
+                    type: "POST",
+                    success: function (response) {
+                        status.html("<b>Xóa dữ liệu thành công</b>");
+                        status.removeClass('text-danger');
+                        status.addClass('text-success');
+                        table.ajax.reload();
+                    },
+                    error: function(xhr, stt, error) {
+                        const response = JSON.parse(xhr.responseText);
+                        status.html("<b>" + response.error + "</b>");
+                        status.removeClass('text-success');
+                        status.addClass('text-danger');
+                    }
+                })
+            }
         });
     });
 </script>

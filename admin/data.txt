@@ -1,3 +1,4 @@
+
 guitar	A musical instrument with strings.
 oxygen	A colorless, odorless gas essential for life.
 mountain	A large natural elevation of the Earth's surface.
@@ -62,4 +63,3 @@ moonlight	The light from the moon.
 vibrant	Full of energy, brightness, and life.
 nostalgia	A sentimental longing or wistful affection for the past.
 brilliant	Exceptionally clever, talented, or impressive.
-xin chào	chao xìn
