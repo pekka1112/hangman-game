@@ -1,5 +1,6 @@
 
 $(document).ready(function(){
+    localStorage.clear();
     function setConfigData(){
         const configData = {
             timeLimit: $('#limitedTime').val(),
@@ -61,4 +62,7 @@ $(document).ready(function() {
     });
     
 });
+
+
+
 
