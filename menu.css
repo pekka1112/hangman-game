@@ -6,6 +6,8 @@
     font-family: "Open Sans", sans-serif;
 }
 body {
+    /* background-image: url(img/description-img-game.png); */
+    /* background-size: cover; */
     padding: 0 10px;
     min-height: 100vh;
     background: #5E63BA;

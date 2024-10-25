@@ -61,4 +61,146 @@ $(document).ready(function() {
     });
     
 });
+var characters_up = [
+	"A",
+	"B",
+	"C",
+	"D",
+	"E",
+	"F",
+	"G",
+	"H",
+	"I",
+	"J",
+	"K",
+	"L",
+	"M",
+	"N",
+	"O",
+	"P",
+	"Q",
+	"R",
+	"S",
+	"T",
+	"U",
+	"V",
+	"W",
+	"X",
+	"Y",
+	"Z"
+];
+var characters_low = [
+	"a",
+	"b",
+	"c",
+	"d",
+	"e",
+	"f",
+	"g",
+	"h",
+	"i",
+	"j",
+	"k",
+	"l",
+	"m",
+	"n",
+	"o",
+	"p",
+	"q",
+	"r",
+	"s",
+	"t",
+	"u",
+	"v",
+	"w",
+	"x",
+	"y",
+	"z"
+];
+var title = ["*", "*", "*", "*", "*","*","*", " ", "*", "*", "*", "*"];
+var myFuncUpper = function (char_num, num) {
+	var i = 0;
+	var character0 = 0;
+	while (i < char_num) {
+		(function (i) {
+			setTimeout(function () {
+				character0 = characters_up[i];
+				title[num] = character0;
+				//console.log(i)
+				update_txt(title);
+			}, 100 * i);
+		})(i++);
+	}
+	return true;
+};
 
+var myFuncLower = function (char_num, num) {
+	var i = 0;
+	var character0 = 0;
+	while (i < char_num) {
+		(function (i) {
+			setTimeout(function () {
+				character0 = characters_low[i];
+				title[num] = character0;
+				//console.log(i)
+				update_txt(title);
+			}, 100 * i);
+		})(i++);
+	}
+	return true;
+};
+
+var complete = 0;
+function intro() {
+	complete = 1;
+	setTimeout(function () {
+		complete = 2;
+		console.log("start");
+		myFuncUpper(8, 0);
+		myFuncUpper(1, 1);
+		myFuncUpper(14, 2);
+		myFuncUpper(7, 3);
+		myFuncUpper(13, 4);
+        myFuncUpper(1,5);
+        myFuncUpper(14,6);
+		//space between
+		myFuncLower(7,8);
+		myFuncLower(1,9);
+        myFuncLower(13,10);
+        myFuncLower(5,11);
+
+        
+	}, 1000);
+
+	setTimeout(function () {
+		complete = 3;
+		console.log("done");
+		document.getElementById("title").style.border = "solid 5px white";
+        document.getElementById("title").style.padding = "10px";
+		// document.getElementById("start").style.top = "10%";
+	}, 3400);
+}
+document.onload = intro();
+
+function update_txt(title) {
+	var string = "";
+	title.forEach((element) => {
+		string += element;
+	});
+	document.getElementById("title").innerHTML = string;
+}
+
+function start() {
+	if (complete == 3) {
+		// document.getElementById("align").style.top = "40%";
+		// document.getElementById("align").style.opacity = "0%";
+
+		setInterval(function () {
+			//put the start location here
+			//location = "";
+            intro();
+		}, 4000);
+	}
+}
+
+document.getElementById("body").addEventListener("click", start);
