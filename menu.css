@@ -11,6 +11,7 @@ body {
     padding: 0 10px;
     min-height: 100vh;
     background: #5E63BA;
+
 }
 .press-start-2p-regular {
     font-family: "Press Start 2P", system-ui;
@@ -30,9 +31,11 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 70px;
+    gap: 2.5vh;
     padding: 60px 40px;
     border-radius: 10px;
+    perspective: 40vw;
+
 }
 .title-game {
     font-size: 10vh;
@@ -86,6 +89,134 @@ body {
 .btn.btn-primary:hover{
     background-color: #5E63BA;
 }
+.threeD-button-set {
+    --y: 0deg;
+    --x: 0deg;
+    --distance: 1px;
+    --theme: hsl(180 100% 50%);
+    --theme-bg: hsl(180 100% 50% / 25%);
+    --theme-bg-hover: hsl(180 100% 50% / 40%);
+    --theme-text: white;
+    --theme-shadow: hsl(180 100% 10% / 25%);
+
+    --_max-rotateY: 10deg;
+    --_max-rotateX: 15deg;
+    --_btn-bg: var(--theme-bg);
+    --_btn-bg-hover: var(--theme-bg-hover);
+    --_btn-text: var(--theme-text);
+    --_btn-text-shadow: var(--theme-shadow);
+    --_bounce-ease: cubic-bezier(.5, 1.75, .75, 1.25);
+
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5vh;
+    /* Tạo không gian 3D */
+    transform-style: preserve-3d;
+
+    /* Điều khiển xoay 3D theo giá trị từ JavaScript */
+    transform: rotateY(
+            clamp(
+                    calc(var(--_max-rotateY) * -1),
+                    var(--y),
+                    var(--_max-rotateY)
+            )
+    )
+    rotateX(
+            clamp(
+                    calc(var(--_max-rotateX) * -1),
+                    var(--x),
+                    var(--_max-rotateX)
+            )
+    );
+
+    @media (prefers-reduced-motion: no-preference) {
+        will-change: transform;
+        transition: transform .1s ease;
+        animation: rotate-y 5s ease-in-out infinite;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        --theme: hsl(255 53% 50%);
+        --theme-bg: hsl(255 53% 71% / 25%);
+        --theme-bg-hover: hsl(255 53% 50% / 40%);
+        --theme-shadow: hsl(255 53% 10% / 25%);
+    }
+}
+
+.threeD-button-set > li {
+    display: inline-flex;
+    width: 100%;
+    justify-content: center;
+    position: relative;
+    transform-style: preserve-3d;
+}
+
+.threeD-button-set button,
+.threeD-button-set a {
+    appearance: none;
+    outline: none;
+    border: none;
+    background-color: var(--_btn-bg);
+    color: var(--_btn-text);
+    text-shadow: 0 1px 1px var(--_btn-text-shadow);
+    font-size: min(5vmin, 2rem);
+    padding-block: 0.75ch;
+    padding-inline: 2ch;
+    border-radius: 5px 20px;
+    transform: translateZ(var(--distance));
+    transform-style: preserve-3d;
+    text-align: center;
+    width: 100%;
+
+    &:is(:hover, :focus-visible):not(:active) {
+        --distance: 15px;
+        background-color: var(--_btn-bg-hover);
+
+        @media (prefers-reduced-motion: no-preference) {
+            --distance: 3vmax;
+            transition-timing-function: var(--_bounce-ease);
+            transition-duration: 0.4s;
+        }
+    }
+
+    &::after,
+    &::before {
+        content: '';
+        opacity: 0.8;
+        position: absolute;
+        inset: 0;
+        border: 1px solid var(--theme);
+        border-radius: 5px 20px;
+        transform: translateZ(calc(var(--distance) / 3));
+
+        @media (prefers-reduced-motion: no-preference) {
+            transition: transform 0.1s ease-out;
+        }
+    }
+
+    &::before {
+        border-width: 3px;
+        transform: translateZ(calc(var(--distance) / 3 * -1));
+
+        @media (prefers-color-scheme: dark) {
+            box-shadow: 0 0 25px var(--theme), inset 0 0 25px var(--theme);
+        }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        will-change: transform;
+        transition: transform 0.2s ease, background-color 0.5s ease;
+    }
+}
+@keyframes rotate-y {
+    50% {
+        transform: rotateY(15deg) rotateX(-6deg);
+    }
+}
+
 
 
 

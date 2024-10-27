@@ -135,9 +135,9 @@ var myFuncUpper = function (char_num, num) {
 	return true;
 };
 
-var myFuncLower = function (char_num, num) {
-	var i = 0;
-	var character0 = 0;
+const myFuncLower = function (char_num, num) {
+	let i = 0;
+	let character0 = 0;
 	while (i < char_num) {
 		(function (i) {
 			setTimeout(function () {
@@ -151,7 +151,7 @@ var myFuncLower = function (char_num, num) {
 	return true;
 };
 
-var complete = 0;
+let complete = 0;
 function intro() {
 	complete = 1;
 	setTimeout(function () {
@@ -177,14 +177,13 @@ function intro() {
 		complete = 3;
 		console.log("done");
 		document.getElementById("title").style.border = "solid 5px white";
-        document.getElementById("title").style.padding = "10px";
+        document.getElementById("title").style.padding = "5px";
 		// document.getElementById("start").style.top = "10%";
 	}, 3400);
 }
 document.onload = intro();
-
 function update_txt(title) {
-	var string = "";
+	let string = "";
 	title.forEach((element) => {
 		string += element;
 	});
@@ -192,7 +191,7 @@ function update_txt(title) {
 }
 
 function start() {
-	if (complete == 3) {
+	if (complete === 3) {
 		// document.getElementById("align").style.top = "40%";
 		// document.getElementById("align").style.opacity = "0%";
 
@@ -200,8 +199,46 @@ function start() {
 			//put the start location here
 			//location = "";
             intro();
-		}, 4000);
+		}, 5000);
 	}
 }
 
-document.getElementById("body").addEventListener("click", start);
+import { rovingIndex } from 'https://cdn.skypack.dev/roving-ux';
+
+const menu = document.querySelector('.threeD-button-set');
+let menuRect = menu.getBoundingClientRect();
+
+window.addEventListener('resize', () => {
+	menuRect = menu.getBoundingClientRect();
+});
+// Kiểm tra nếu người dùng không yêu cầu giảm chuyển động
+const { matches: motionOK } = window.matchMedia('(prefers-reduced-motion: no-preference)');
+
+rovingIndex({
+	element: document.querySelector('.threeD-button-set'),
+	target: 'button',
+});
+
+if (!motionOK) {
+	window.addEventListener('mousemove', ({ clientX, clientY }) => {
+		const { dx, dy } = getAngles(clientX, clientY);
+
+		// Cập nhật giá trị --x và --y cho góc xoay trong CSS
+		menu.style.setProperty('--x', `${dy / 20}deg`);
+		menu.style.setProperty('--y', `${dx / 20}deg`);
+	});
+}
+
+// Hàm tính toán góc theo vị trí chuột
+function getAngles(clientX, clientY) {
+	const { x, y, width, height } = menuRect;
+
+	const dx = clientX - (x + width / 2);
+	const dy = clientY - (y + height / 2);
+
+	return { dx, dy };
+}
+
+
+
+// document.getElementById("body").addEventListener("click", start);

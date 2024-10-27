@@ -1,3 +1,5 @@
+import {fetchData} from "/js/wordList.js";
+let wordList = [];
 const hangmanImage = document.querySelector(".hangman-box img");
 const wordDisplay = document.querySelector(".word-display");
 const guessesText = document.querySelector(".guesses-text b");
@@ -26,15 +28,13 @@ const resetKeyboard = () => {
     });
 };
 
-const getRandomWord = () => {
+const getRandomWord = async () => {
+    wordList = await fetchData();
     const { word, hint } = wordList[Math.floor(Math.random() * wordList.length)];
     currentWord = word;
     console.log(word, hint);
     document.querySelector(".hint-text b").innerText = hint;
-
-
     wordDisplay.innerHTML = word.split('').map(() => `<li class="letter"></li>`).join('');
-    
     correctLetters = [];
 };
 

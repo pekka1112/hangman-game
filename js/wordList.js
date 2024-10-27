@@ -1,26 +1,16 @@
-const wordList = [
-    {
-        word: "coffee",
-        hint: "Thức uống mà coder thường rất thích để giúp tỉnh táo"
-    },
-    {
-        word: "javascript",
-        hint: "Ngôn ngữ lập trình phổ biến nhất hiện nay"
-    },
-    {
-        word: "developer",
-        hint: "Người lập trình"
-    },
-    {
-        word: "computer",
-        hint: "Máy tính"
-    },
-    {
-        word: "keyboard",
-        hint: "Bàn phím"
-    },
-    {
-        word: "mouse",
-        hint: "Chuột máy tính"
+export const fetchData = async () => {
+    let wordList = [];
+    try {
+        const response = await fetch('/admin/action/get.php');
+        if (response.status === 404) {
+            throw new Error('Resource not found (404)');
+        }
+        if(!response.ok){
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            wordList = await response.json();
+    } catch (error){
+        console.error('There has been a problem with your fetch operation:', error);
     }
-];
+    return wordList;
+}
