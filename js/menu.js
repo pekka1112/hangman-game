@@ -1,5 +1,6 @@
 
 $(document).ready(function(){
+    localStorage.clear();
     function setConfigData(){
         const configData = {
             timeLimit: $('#limitedTime').val(),
@@ -169,7 +170,7 @@ function intro() {
         myFuncLower(13,10);
         myFuncLower(5,11);
 
-        
+
 	}, 1000);
 
 	setTimeout(function () {

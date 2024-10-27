@@ -1,14 +1,15 @@
 let timer; 
+let timeLeft; 
 const dataConfig = JSON.parse(localStorage.getItem("configData"));
-// let timeLeft = dataConfig.timeLimit * 60; 
-let timeLeft = 180;
 function startTimer() {
-    timeLeft = 180; 
+    const storedTimeLimit = dataConfig ? dataConfig.timeLimit : null;
+    timeLeft = storedTimeLimit ? parseInt(storedTimeLimit) * 60 : 180;
     updateTimerDisplay(); 
     timer = setInterval(() => {
         if (timeLeft <= 0) {
             clearInterval(timer);
-            stopGame();
+            handleTeamLoss();
+            // stopGame();
         } else {
             timeLeft--;
             updateTimerDisplay(); 
@@ -29,9 +30,8 @@ function updateTimerDisplay() {
     }
 }
 
-function stopGame() {
-    clearInterval(timer); 
-    document.querySelector('.game-modal').classList.add('show');
-}
+
 
 startTimer();
+
+

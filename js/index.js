@@ -7,72 +7,162 @@ const maxGuesses = 6;
 const gameModal = document.querySelector(".game-modal");
 const playAgainBtn = document.querySelector(".play-again");
 
+let teams = JSON.parse(localStorage.getItem('teamsData')) || [];
+let currentTeamIndex = 0;
+let roundTimer;
+
 const resetGame = () => {
     correctLetters = [];
     wrongGuessCount = 0;
     guessesText.innerText = `${wrongGuessCount} / ${maxGuesses}`;
     hangmanImage.src = `img/hangman-${wrongGuessCount}.svg`;
-    keyboardDiv.querySelectorAll("button").forEach(button => button.disabled = false);
-    wordDisplay.querySelectorAll("li").forEach(li => li.innerText = "");
     gameModal.classList.remove("show");
-    startTimer();
-}
+    resetKeyboard();
+};
+
+const resetKeyboard = () => {
+    keyboardDiv.querySelectorAll("button").forEach(button => {
+        button.disabled = false;  
+    });
+};
+
 const getRandomWord = () => {
-    clearInterval(timer); 
-    const {word, hint} = wordList[Math.floor(Math.random() * wordList.length)];
+    const { word, hint } = wordList[Math.floor(Math.random() * wordList.length)];
     currentWord = word;
     console.log(word, hint);
     document.querySelector(".hint-text b").innerText = hint;
-    resetGame();
+
 
     wordDisplay.innerHTML = word.split('').map(() => `<li class="letter"></li>`).join('');
-   
-}
+    
+    correctLetters = [];
+};
+
 const initGame = (button, clickedLetter) => {
-    if(currentWord.includes(clickedLetter)){
+    if (correctLetters.includes(clickedLetter)) {
+        button.disabled = true;  
+        return; 
+    }
+
+    if (currentWord.includes(clickedLetter)) {
         [...currentWord].forEach((letter, index) => {
-            if(letter === clickedLetter){
+            if (letter === clickedLetter) {
                 correctLetters.push(letter);
-                wordDisplay.querySelectorAll("li")[index].innerText = letter;
+                wordDisplay.querySelectorAll("li")[index].innerText = letter; 
                 wordDisplay.querySelectorAll("li")[index].classList.add("guessed");
             }
         });
-    }else{
+    } else {
         wrongGuessCount++;
         hangmanImage.src = `img/hangman-${wrongGuessCount}.svg`;
     }
+
     button.disabled = true;
     guessesText.innerText = `${wrongGuessCount} / ${maxGuesses}`;
 
-    if(wrongGuessCount === maxGuesses) return gameOver(false);
-    if(correctLetters.length === new Set(currentWord).size) return gameOver(true);
+    if (wrongGuessCount === maxGuesses) {
+        handleTeamLoss();
+        return; 
+    }
 
+    if (new Set(correctLetters).size === new Set(currentWord).size) {
+        const currentTeam = teams[currentTeamIndex];
+        currentTeam.score += 1;  
+        localStorage.setItem('teamsData', JSON.stringify(teams));  
+        resetKeyboard();
+    
+        setTimeout(() => {
+            getRandomWord();  
+        }, 1000);
+    }
 }
+
+
+const handleTeamLoss = () => {
+    const currentTeam = teams[currentTeamIndex];
+    currentTeam.roundsPlayed++;  
+    localStorage.setItem('teamsData', JSON.stringify(teams)); 
+
+
+    setTimeout(() => {
+        if (currentTeamIndex < teams.length - 1) {
+            const proceed = confirm("Đội tiếp theo có muốn chơi không?");
+            if (proceed) {
+                currentTeamIndex++;
+                startRound(); 
+            }
+        } else {
+            checkForTies(); 
+        }
+    }, 1000);
+};
+
+
+// const showLostTurnModal = () => {
+//     gameModal.querySelector("img").src = `img/lost.gif`;
+//     gameModal.querySelector("h4").innerText = "Thất bại!";
+//     gameModal.querySelector("p").innerHTML = "Bạn đã đoán sai quá nhiều. Đến lượt đội tiếp theo!";
+//     gameModal.classList.add("show");
+// }
+
 for (let i = 97; i <= 122; i++) {
     const button = document.createElement('button');
     button.innerText = String.fromCharCode(i);
     keyboardDiv.appendChild(button);
-    button.addEventListener("click", e => initGame(e.target, String.fromCharCode(i)));
+    button.addEventListener("click", e => initGame(button, String.fromCharCode(i))); 
 }
+
+playAgainBtn.addEventListener("click", () => {
+    const currentTeam = teams[currentTeamIndex];
+    
+    
+    if (currentTeamIndex < teams.length - 1) {
+        currentTeamIndex++;
+        resetGame(); 
+        getRandomWord();  
+    } else {
+    
+        currentTeamIndex = 0; 
+        resetGame();
+        getRandomWord();
+    }
+});
+
 const gameOver = (isWin) => { 
-    clearInterval(timer)
+    const currentTeam = teams[currentTeamIndex];
+    clearTimeout(roundTimer); 
+
     setTimeout(() => {
         const modalText = isWin ? "Bạn đã tìm thấy từ:" : "Từ đúng là:";
         gameModal.querySelector("img").src = `img/${isWin ? "victory" : "lost"}.gif`;
         gameModal.querySelector("h4").innerText = `${isWin ? "Chiến thắng!" : "Thất bại!"}`;
         gameModal.querySelector("p").innerHTML = `${modalText} <b>${currentWord}</b>`;
         gameModal.classList.add("show");
-    }, 300);
-}
-getRandomWord();
-playAgainBtn.addEventListener("click", getRandomWord);
 
-let teams = JSON.parse(localStorage.getItem('teamsData'));
-let currentTeamIndex = 0;
-// Update Score
-function updateLeaderboard(){
+        currentTeam.roundsPlayed++;
+        localStorage.setItem('teamsData', JSON.stringify(teams));
+
+        setTimeout(() => {
+            if (currentTeamIndex < teams.length - 1) {
+                const proceed = confirm("Đội tiếp theo có muốn chơi không?");
+                if (proceed) {
+                    currentTeamIndex++;
+                    startRound(); 
+                }
+            } else {
+                checkForTies();
+            }
+        }, 1000);
+
+        resetGame(); 
+    }, 300);
+};
+
+
+
+function updateLeaderboard() {
     const teams = JSON.parse(localStorage.getItem('teamsData'));
-    teams.sort((a,b) => b.score - a.score);
+    teams.sort((a, b) => b.score - a.score);
     const leaderboardBody = document.querySelector('table tbody');
     leaderboardBody.innerHTML = '';
 
@@ -88,52 +178,61 @@ function updateLeaderboard(){
     });
     localStorage.setItem('teamsData', JSON.stringify(teams));
 }
-//Start
-function startRound(){
-    const currentTeam = teams[currentTeamIndex];
-    
-    let roundTimer = setTimeout(() => {
-        let isWin = checkTeamWin();
-        if(isWin){
-            currentTeam.score += 5;
-        }else{
-            currentTeam.score += 0;
-        }
-        currentTeam.roundsPlayed++;
-        localStorage.setItem('teamsData', JSON.stringify(teams));
-        currentTeamIndex++;
 
-        if(teams.every(team => team.roundsPlayed >= 5)){
-            checkForTies();
-        }else{
-            startRound();
-        }
-    }, 180000);
+
+function startRound() {
+    if (currentTeamIndex < teams.length) {
+        resetGame(); 
+        getRandomWord(); 
+        resetKeyboard();
+
+        wrongGuessCount = 0;
+        guessesText.innerText = `${wrongGuessCount} / ${maxGuesses}`;
+        hangmanImage.src = `img/hangman-${wrongGuessCount}.svg`;
+
+        clearInterval(timer);
+
+        roundTimer = setTimeout(() => {
+            handleTeamLoss(); 
+        }, 180000); 
+
+        startTimer(); 
+    } else {
+        checkForTies(); 
+    }
 }
-//Check Team Win
+
 function checkTeamWin() {
-    if(correctLetters.length === new Set(currentWord).size){
-        return true;
-    }
-    if(wrongGuessCount >= maxGuesses){
-        return false;
-    }
-    return null;
+    return correctLetters.length === new Set(currentWord).size;
 }
-// Check Ties
-function checkForTies(){
-    teams.sort((a,b) => b.score - a.score);
+
+function checkForTies() {
+    teams.sort((a, b) => b.score - a.score); 
+
+    const highestScoreTeam = teams[0]; 
+    const highestScore = highestScoreTeam.score;
 
     let hasTies = false;
     for (let i = 0; i < teams.length - 1; i++) {
-        if(teams[i].score === teams[i + 1].score){
+        if (teams[i].score === teams[i + 1].score) {
             hasTies = true;
             break;
         }
     }
-    if(hasTies){
-        startRound();
-    }else{
-        updateLeaderboard();
+
+    if (hasTies) {
+        alert("Có đội hòa! Chúc mừng!");
+    } else {
+        alert(`Cuộc chơi đã kết thúc! Đội chiến thắng là ${highestScoreTeam.name} với ${highestScore} điểm!`);
     }
+
+    resetGame(); 
+    currentTeamIndex = 0; 
+    updateLeaderboard(); 
+
+    window.location.href = "menu.html";
 }
+
+
+getRandomWord();
+startRound();
