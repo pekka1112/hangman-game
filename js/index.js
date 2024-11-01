@@ -1,4 +1,5 @@
 import {fetchData} from "/js/wordList.js";
+
 let wordList = [];
 const hangmanImage = document.querySelector(".hangman-box img");
 const wordDisplay = document.querySelector(".word-display");
@@ -10,6 +11,7 @@ const gameModal = document.querySelector(".game-modal");
 const playAgainBtn = document.querySelector(".play-again");
 
 let teams = JSON.parse(localStorage.getItem('teamsData')) || [];
+let time = JSON.parse(localStorage.getItem('configData')) || [];
 let currentTeamIndex = 0;
 let roundTimer;
 
@@ -70,9 +72,9 @@ const initGame = (button, clickedLetter) => {
         currentTeam.score += 1;  
         localStorage.setItem('teamsData', JSON.stringify(teams));  
         resetKeyboard();
-    
+        updateLeaderboard();
         setTimeout(() => {
-            getRandomWord();  
+            getRandomWord();
         }, 1000);
     }
 }
@@ -80,17 +82,25 @@ const initGame = (button, clickedLetter) => {
 
 const handleTeamLoss = () => {
     const currentTeam = teams[currentTeamIndex];
-    currentTeam.roundsPlayed++;  
-    localStorage.setItem('teamsData', JSON.stringify(teams)); 
+    currentTeam.roundsPlayed++;
+    localStorage.setItem('teamsData', JSON.stringify(teams));
 
 
     setTimeout(() => {
         if (currentTeamIndex < teams.length - 1) {
-            const proceed = confirm("Đội tiếp theo có muốn chơi không?");
-            if (proceed) {
+            // const proceed = confirm("Đội tiếp theo có muốn chơi không?");
+            $('#alertModal .modal-body').html(`<p>Đội tiếp theo là ${teams[currentTeamIndex+1].name} </p>`);
+            $('#alertModal').modal('show');
+            // const proceed = true;
+            // if (proceed) {
+            //     currentTeamIndex++;
+            //     startRound();
+            // }
+            $('#confirmBtn').on('click', function (){
+                $('#alertModal').modal('hide');
                 currentTeamIndex++;
-                startRound(); 
-            }
+                startRound();
+            });
         } else {
             checkForTies(); 
         }
@@ -144,11 +154,19 @@ const gameOver = (isWin) => {
 
         setTimeout(() => {
             if (currentTeamIndex < teams.length - 1) {
-                const proceed = confirm("Đội tiếp theo có muốn chơi không?");
-                if (proceed) {
+                // const proceed = confirm("Đội tiếp theo có muốn chơi không?");
+                $('#alertModal .modal-body').html(`<p>Đội tiếp theo là ${teams[currentTeamIndex+1].name} </p>`);
+                $('#alertModal').modal('show');
+                // const proceed = true;
+                // if (proceed) {
+                //     currentTeamIndex++;
+                //     startRound();
+                // }
+                $('#confirmBtn').on('click', function (){
+                    $('#alertModal').modal('hide');
                     currentTeamIndex++;
-                    startRound(); 
-                }
+                    startRound();
+                });
             } else {
                 checkForTies();
             }
@@ -157,33 +175,44 @@ const gameOver = (isWin) => {
         resetGame(); 
     }, 300);
 };
-
-
-
+let prize1 ="<img width=\"24\" height=\"24\" src=\"https://img.icons8.com/color/48/first-place-ribbon.png\" alt=\"first-place-ribbon\"/>"
+let prize2 = "<img width=\"24\" height=\"24\" src=\"https://img.icons8.com/color/48/second-place-ribbon.png\" alt=\"second-place-ribbon\"/>"
+let prize3 = "<img width=\"24\" height=\"24\" src=\"https://img.icons8.com/color/48/third-place-ribbon.png\" alt=\"third-place-ribbon\"/>"
+let prize4 = "<img width=\"24\" height=\"24\" src=\"https://img.icons8.com/color/48/prize.png\" alt=\"prize\"/>"
+let prize5 = "<img width=\"24\" height=\"24\" src=\"https://img.icons8.com/fluency/48/prize--v1.png\" alt=\"prize--v1\"/>"
+function getPrizeIcon(index) {
+    switch (index) {
+        case 0: return prize1;
+        case 1: return prize2;
+        case 2: return prize3;
+        case 3: return prize4;
+        case 4: return prize5;
+        default: return "";
+    }
+}
 function updateLeaderboard() {
-    const teams = JSON.parse(localStorage.getItem('teamsData'));
-    teams.sort((a, b) => b.score - a.score);
-    const leaderboardBody = document.querySelector('table tbody');
-    leaderboardBody.innerHTML = '';
+        const teams = JSON.parse(localStorage.getItem('teamsData'));
+        teams.sort((a, b) => b.score - a.score);
+        const leaderboardBody = document.querySelector('table tbody');
+        leaderboardBody.innerHTML = '';
 
-    teams.forEach((team, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <th scope="row">${index + 1}</th>
+        teams.forEach((team, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+            <th scope="row">${getPrizeIcon(index)}</th>
             <td>${team.name}</td>
-            <td>${team.roundsPlayed}</td>
             <td>${team.score}</td>
         `;
-        leaderboardBody.appendChild(row);
-    });
-    localStorage.setItem('teamsData', JSON.stringify(teams));
+            leaderboardBody.appendChild(row);
+        });
+        localStorage.setItem('teamsData', JSON.stringify(teams));
 }
-
 
 function startRound() {
     if (currentTeamIndex < teams.length) {
-        resetGame(); 
-        getRandomWord(); 
+        document.querySelector('#team-name').innerText = teams[currentTeamIndex].name;
+        resetGame();
+        getRandomWord();
         resetKeyboard();
 
         wrongGuessCount = 0;
@@ -194,7 +223,7 @@ function startRound() {
 
         roundTimer = setTimeout(() => {
             handleTeamLoss(); 
-        }, 180000); 
+        }, time.timeLimit * 1000 * 60);
 
         startTimer(); 
     } else {
@@ -219,7 +248,6 @@ function checkForTies() {
             break;
         }
     }
-
     if (hasTies) {
         alert("Có đội hòa! Chúc mừng!");
     } else {
@@ -228,11 +256,8 @@ function checkForTies() {
 
     resetGame(); 
     currentTeamIndex = 0; 
-    updateLeaderboard(); 
-
+    updateLeaderboard();
     window.location.href = "menu.html";
 }
-
-
-getRandomWord();
+updateLeaderboard();
 startRound();
