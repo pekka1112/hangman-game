@@ -1,4 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Press+Start+2P&display=swap');
 * {
     margin: 0;
     padding: 0;
@@ -11,21 +13,131 @@ body {
     min-height: 100vh;
     background: #5E63BA;
 }
+/*Font Class*/
+/*Start*/
+.press-start-2p-regular {
+    font-family: "Press Start 2P", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+.bungee-regular {
+    font-family: "Bungee", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+.bungee-regular-title{
+    color: white;
+    font-family: "Bungee", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 2rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+}
+.bungee-regular-normal{
+    color: white;
+    font-family: "Bungee", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.text-shadow{
+    text-shadow: 2px 2px #2f3542, 4px 4px #57606f, 6px 6px #2f3542;
+}
+.text-light{
+    text-shadow: 0 0 5px #5E63BA, 0 0 10px #5E63BA, 0 0 20px #5E63BA, 0 0 40px #5E63BA;
+}
+@keyframes flicker {
+    0% { opacity: 1; }
+    50% { opacity: 0.75; }
+    100% { opacity: 1;}
+}
+.text-action{
+    animation: flicker 1s infinite;
+}
+/*End*/
+.container-main{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1vh;
+}
 
 .wrapper {
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     align-items: center;
     justify-content: center; 
-    min-height: 100vh; 
+    min-height: 100vh;
+    width: 80vw;
+}
+.list-core{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 20vw;
+    min-height: 100vh;
+    padding: 0;
+}
+.table{
+    background: transparent;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+.table thead{
+    background-color: white;
+    color: #5E63BA;
+}
+.table tbody tr:nth-child(even){
+    color: white;
+    background-color: #5E63BA;
+    transition: all 1ms ease-in-out;
 
 }
-
-#title {
+.table tbody tr:nth-child(odd) {
+    color: white;
+    background-color: #6A5EBAFF;
+    transition: all 1ms ease-in-out;
+}
+.table th, td{
+    padding: 15px;
+    text-align: center;
+    vertical-align: middle;
+}
+.table th {
+    border-bottom: 2px solid #ff4757;
+    transition: all 0.1s ease-in-out;
+}
+.table td {
+    border-bottom: 1px solid #3a3a3a;
+}
+.table tbody tr{
+}
+.table tbody tr:hover{
+    transform: scale(1.05);
+}
+.table tr:hover {
+    background-color: #ff6348; cursor: pointer;
+}
+@media (max-width: 768px) {
+    .table {
+        font-size: 0.8rem;
+    }
+}
+.container-info{
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+}
+#title, h5 {
     font-size: 40px;
     color: white;
-    margin-bottom: 30px
-
+    margin-bottom: 1rem;
+    cursor: pointer;
 }
 
 .red {
@@ -44,8 +156,7 @@ body {
 }
 
 .container {
-    
-    width: 850px;
+    width: 80%;
     background: #fff;
     display: flex;
     gap: 70px;
@@ -60,15 +171,17 @@ body {
 
 .hangman-box h1 {
     color: #5E63BA;
-    font-size: 1.45rem;
+    font-size: 1.4rem;
     margin-top: 20px;
     text-align: center;
     text-transform: uppercase;
+    cursor: pointer;
 }
 
 .word-display {
     display: flex;
-    gap: 10px;
+    flex-wrap: wrap;
+    gap: 5px;
     list-style: none;
     align-items: center; 
     justify-content: center;
@@ -230,4 +343,20 @@ body {
     .hangman-box h1 {
         display: none;
     }
+}
+/*Modal Effect*/
+.btn-closed{
+    font-weight: bold;
+    border: none;
+    background: transparent;
+}
+@keyframes borderWave {
+    0% { border-radius: 10% 10% 20% 20% / 10% 10% 20% 20%; }
+    25% { border-radius: 10% 10% 15% 15% / 15% 15% 10% 20%; }
+    50% { border-radius: 10% 10% 15% 15% / 10% 10% 15% 15%; }
+    75% { border-radius: 10% 10% 15% 20% / 10% 10% 20% 20%; }
+    100% { border-radius: 10% 10% 20% 20% / 10% 10% 20% 20%; }
+}
+.modal-content{
+    animation: borderWave 10s infinite;
 }
