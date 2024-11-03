@@ -1,4 +1,5 @@
-* Cách chạy server trong môi trường phát triển:
+* Tóm tắt cách chạy server trong môi trường phát triển:
+(Link hướng dẫn chi tiết: https://docs.google.com/document/d/1QUFkCKLF0dMV6eK4-KRH5YWtuKtQtA_U/edit?usp=drive_link&ouid=107676519725266314742&rtpof=true&sd=true)
 1. Cài đặt xampp.
 2. Mở IntelliJ chọn Edit Configurations...
 3. Bấm dấu + để thêm Configuration mới.
