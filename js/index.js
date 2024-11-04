@@ -89,7 +89,9 @@ const handleTeamLoss = () => {
     setTimeout(() => {
         if (currentTeamIndex < teams.length - 1) {
             // const proceed = confirm("Đội tiếp theo có muốn chơi không?");
-            $('#alertModal .modal-body').html(`<p>Đội tiếp theo là ${teams[currentTeamIndex+1].name} </p>`);
+            $('#alertModal .modal-body .body-content').html(`
+                <p class="final-score text-center bungee-regular-normal">${teams[currentTeamIndex].score} </p>
+                <p class="text-center bungee-regular">Đội tiếp theo là ${teams[currentTeamIndex+1].name} </p>`);
             $('#alertModal').modal('show');
             // const proceed = true;
             // if (proceed) {
@@ -155,7 +157,9 @@ const gameOver = (isWin) => {
         setTimeout(() => {
             if (currentTeamIndex < teams.length - 1) {
                 // const proceed = confirm("Đội tiếp theo có muốn chơi không?");
-                $('#alertModal .modal-body').html(`<p>Đội tiếp theo là ${teams[currentTeamIndex+1].name} </p>`);
+                $('#alertModal .modal-body .body-content').html(`
+                    <p class="final-score text-center bungee-regular-normal">${teams[currentTeamIndex].score} </p>
+                    <p class="text-center bungee-regular">Đội tiếp theo là ${teams[currentTeamIndex+1].name} </p>`);
                 $('#alertModal').modal('show');
                 // const proceed = true;
                 // if (proceed) {
@@ -249,15 +253,25 @@ function checkForTies() {
         }
     }
     if (hasTies) {
-        alert("Có đội hòa! Chúc mừng!");
+        $('#alertModal .modal-body .body-content').html(`
+                <p class="final-score text-center bungee-regular-normal">**</p>
+                <p class="text-center bungee-regular">Tất cả các đội đều hoà</p>`);
+        $('#alertModal').modal('show');
     } else {
-        alert(`Cuộc chơi đã kết thúc! Đội chiến thắng là ${highestScoreTeam.name} với ${highestScore} điểm!`);
+        // alert(`Cuộc chơi đã kết thúc! Đội chiến thắng là ${highestScoreTeam.name} với ${highestScore} điểm!`);
+        $('#alertModal .modal-body .body-content').html(`
+                    <p class="final-score text-center bungee-regular-normal">${highestScore} </p>
+                    <p class="text-center bungee-regular">Đội chiến thắng là <span class="bungee-regular-purple">${highestScoreTeam.name}</span> </p>`);
+        $('#alertModal').modal('show');
     }
-
-    resetGame(); 
-    currentTeamIndex = 0; 
+    resetGame();
+    currentTeamIndex = 0;
     updateLeaderboard();
-    window.location.href = "menu.html";
+    $('#confirmBtn').on('click', function (){
+        $('#alertModal').modal('hide');
+        window.location.href = "menu.html";
+    });
+
 }
 updateLeaderboard();
 startRound();

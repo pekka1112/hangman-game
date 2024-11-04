@@ -26,6 +26,11 @@ body {
     font-weight: 400;
     font-style: normal;
 }
+.bungee-regular-purple {
+    font-family: "Bungee", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
 .bungee-regular-title{
     color: white;
     font-family: "Bungee", sans-serif;
@@ -41,7 +46,14 @@ body {
     font-style: normal;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
 }
-
+.bungee-regular-normal-purple{
+    color: #5E63BA;
+    font-family: "Bungee", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: xx-large;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+}
 .text-shadow{
     text-shadow: 2px 2px #2f3542, 4px 4px #57606f, 6px 6px #2f3542;
 }
@@ -141,18 +153,18 @@ body {
 }
 
 .red {
-    animation: rainbow-blink 0.7s infinite; 
+    animation: rainbow-blink 5s infinite;
 }
 
 @keyframes rainbow-blink {
-    0% { color: red; }
-    14% { color: orange; }
-    28% { color: yellow; }
-    42% { color: green; }
-    57% { color: blue; }
-    71% { color: indigo; }
-    85% { color: violet; }
-    100% { color: red; } 
+    0% { color: #FFB3B3; }
+    14% { color: #FFD9B3; }
+    28% { color: #FFFFB3; }
+    42% { color: #B3FFB3; }
+    57% { color: #B3D9FF; }
+    71% { color: #D9B3FF; }
+    85% { color: #FFB3FF; }
+    100% { color: #FFB3B3; }
 }
 
 .container {
@@ -359,4 +371,34 @@ body {
 }
 .modal-content{
     animation: borderWave 10s infinite;
+}
+@keyframes borderWaveScore {
+    0% { border-radius: 25% 25% 50% 50% / 25% 25% 50% 50%; }
+    25% { border-radius: 50% 50% 35% 35% / 35% 35% 25% 50%; }
+    50% { border-radius: 20% 20% 35% 35% / 20% 20% 35% 35%; }
+    75% { border-radius: 20% 20% 35% 50% / 20% 20% 50% 50%; }
+    100% { border-radius: 20% 20% 50% 50% / 25% 25% 50% 50%; }
+}
+.final-score{
+    padding: 20% 0;
+    font-size: 32px;
+    /*border-radius: 20% 20% 20% 20% / 20% 20% 20% 20%;*/
+    background: #5E63BA;
+    margin-bottom: 1.8rem;
+    animation: borderWaveScore 10s infinite;
+
+}
+/*Button*/
+.btn.btn-primary{
+    background-color: #5E63BA;
+}
+.btn.btn-primary:hover{
+    opacity: 1;
+    background-color: #5E63BA;
+}
+.btn.btn-action{
+    transition: all 0.2s ease-in-out;
+}
+.btn.btn-action:hover{
+    transform: scale(1.10);
 }
