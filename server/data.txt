@@ -1,4 +1,3 @@
-
 guitar	A musical instrument with strings.
 oxygen	A colorless, odorless gas essential for life.
 mountain	A large natural elevation of the Earth's surface.
