@@ -4,7 +4,7 @@ Link hướng dẫn chi tiết: https://docs.google.com/document/d/1QUFkCKLF0dMV
 - Mở project bằng **IntelliJ** chọn **Edit Configurations...**
 - Bấm dấu **+** để thêm Configuration mới.
 - Chọn **PHP Script**, tiến hành cấu hình như sau:
-  - Tại mục **File**, chỉ đường dẫn đến file **fileConfig.php** trong project (thư mục server).
+  - Tại mục **File**, chỉ đường dẫn đến file **fileConfig.php** trong project (thư mục **server**).
   - Bấm vô dấu **...** trong mục **Interpreter**.
   - Tại mục **PHP executable**, chỉ đường dẫn đến file **php.exe** (trong thư mục cài xampp có thư mục php, trong đó có file php.exe) sau đó nhấn **OK**.
   - Nhấn **OK** để hoàn thành cấu hình.
