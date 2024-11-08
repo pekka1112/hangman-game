@@ -62,20 +62,10 @@
 <script src="https://cdn.datatables.net/v/bs5/dt-2.1.3/datatables.min.js"></script>
 <script>
     $(document).ready(function () {
-        // xử lý sự kiện tải file
-        $("#btn-download").on("click", function() {
-           const link = document.createElement("a");
-           link.href = "data.txt";
-           link.download = "data.txt";
-           document.body.appendChild(link);
-           link.click();
-           document.body.removeChild(link);
-        });
-
         // khởi tạo datatable
         const table = $('#data-table').DataTable({
             "ajax": {
-                "url": "./action/get.php",
+                "url": "../server/action/get.php",
                 "dataSrc": "",
                 "type": "GET"
             },
@@ -127,7 +117,7 @@
                     hint: hint,
                 };
                 $.ajax({
-                    url: './action/insert.php',
+                    url: '../server/action/insert.php',
                     type: 'POST',
                     data: formData,
                     success: function(response) {
@@ -152,7 +142,7 @@
             let word = $(this).data('id');
             if (confirm("Bạn có chắc muốn xoá từ này không? Thông tin sau khi xoá sẽ không thể phục hồi.")) {
                 $.ajax({
-                    url: "./action/delete.php?word=" + word,
+                    url: "../server/action/delete.php?word=" + word,
                     type: "GET",
                     success: function (response) {
                         $('#status').html("<b>Xoá từ thành công!</b>");
@@ -192,7 +182,7 @@
             var formData = new FormData(this);
             const status = $("#tool-status");
             $.ajax({
-                url: "./tool/importTxt.php",
+                url: "../server/tool/importTxt.php",
                 type: "POST",
                 data: formData,
                 processData: false,
@@ -212,13 +202,46 @@
             });
         });
 
+        // xử lý sự kiện xuất file dữ liệu
+        $("#btn-download").on("click", function() {
+            $.ajax({
+                url: "../server/tool/exportTxt.php",
+                method: "GET",
+                xhrFields: {
+                    responseType: "blob"
+                },
+                success: function(response, status, xhr) {
+                    let fileName = "data.txt";
+                    let disposition = xhr.getResponseHeader("Content-Disposition");
+                    if(disposition && disposition.indexOf("attachment") !== -1) {
+                        let match = disposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+                        if(match != null && match[1]) {
+                            fileName = match[1].replace(/['"]/g, '');
+                        }
+                    }
+                    // create download element
+                    var link = document.createElement("a");
+                    link.href = window.URL.createObjectURL(response);
+                    link.download = fileName;
+                    link.click();
+                },
+                error: function (xhr){
+                    if(xhr.status === 404) {
+                        alert("File tải về không có sẵn");
+                    } else {
+                        alert("Có lỗi xảy ra");
+                    }
+                }
+            });
+        });
+
         // xử lý sự kiện xóa toàn bộ file dữ liệu
         $("#btn-delete-all").on("click", function(e) {
             e.preventDefault();
             const status = $("#tool-status");
             if(confirm("Bạn có chắc muốn xóa toàn bộ file dữ liệu không? Dữ liệu sau khi xóa sẽ không thể phục hồi.")) {
                 $.ajax({
-                    url: "./tool/deleteAll.php",
+                    url: "../server/tool/deleteAll.php",
                     type: "POST",
                     success: function (response) {
                         status.html("<b>Xóa dữ liệu thành công</b>");
