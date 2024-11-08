@@ -1,18 +1,22 @@
-let timer; 
-let timeLeft; 
+let timer;
+let timeLeft;
 const dataConfig = JSON.parse(localStorage.getItem("configData"));
+
 function startTimer() {
     const storedTimeLimit = dataConfig ? dataConfig.timeLimit : null;
-    timeLeft = storedTimeLimit ? parseInt(storedTimeLimit) * 60 : 180;
-    updateTimerDisplay(); 
+
+    timeLeft = parseInt(localStorage.getItem("timeLeft")) || (storedTimeLimit ? parseInt(storedTimeLimit) * 60 : 180);
+    updateTimerDisplay();
+
     timer = setInterval(() => {
         if (timeLeft <= 0) {
             clearInterval(timer);
+            localStorage.removeItem("timeLeft"); 
             handleTeamLoss();
-            // stopGame();
         } else {
             timeLeft--;
-            updateTimerDisplay(); 
+            localStorage.setItem("timeLeft", timeLeft); 
+            updateTimerDisplay();
         }
     }, 1000);
 }
@@ -30,8 +34,13 @@ function updateTimerDisplay() {
     }
 }
 
+if (!timer) {
+    startTimer();
+}
 
+function clearSavedTime() {
+    localStorage.removeItem("timeLeft");
+}
 
-startTimer();
 
 
