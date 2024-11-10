@@ -209,6 +209,7 @@ function updateLeaderboard() {
 }
 
 function startRound() {
+    clearTimeout(roundTimer); // Xóa roundTimer cũ nếu có
     if (currentTeamIndex < teams.length) {
         document.querySelector('#team-name').innerText = teams[currentTeamIndex].name;
         resetGame();
@@ -219,17 +220,21 @@ function startRound() {
         guessesText.innerText = `${wrongGuessCount} / ${maxGuesses}`;
         hangmanImage.src = `img/hangman-${wrongGuessCount}.svg`;
 
-        clearInterval(timer);
+        if (!localStorage.getItem("timeLeft")) {
+            localStorage.setItem("timeLeft", time.timeLimit * 60);
+        }
+
+        startTimer(); 
 
         roundTimer = setTimeout(() => {
             handleTeamLoss(); 
-        }, time.timeLimit * 1000 * 60);
-
-        startTimer(); 
+        }, timeLeft * 1000); 
     } else {
         checkForTies(); 
     }
 }
+
+
 
 function checkTeamWin() {
     return correctLetters.length === new Set(currentWord).size;
