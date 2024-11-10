@@ -3,9 +3,15 @@ let timeLeft;
 const dataConfig = JSON.parse(localStorage.getItem("configData"));
 
 function startTimer() {
-    const storedTimeLimit = dataConfig ? dataConfig.timeLimit : null;
+    clearInterval(timer); // Xóa timer cũ trước khi tạo mới
 
-    timeLeft = parseInt(localStorage.getItem("timeLeft")) || (storedTimeLimit ? parseInt(storedTimeLimit) * 60 : 180);
+    const storedTimeLeft = localStorage.getItem("timeLeft");
+    const storedTimeLimit = dataConfig ? dataConfig.timeLimit : null;
+    
+    timeLeft = storedTimeLeft !== null 
+        ? parseInt(storedTimeLeft) 
+        : (storedTimeLimit ? parseInt(storedTimeLimit) * 60 : 180);
+
     updateTimerDisplay();
 
     timer = setInterval(() => {
@@ -20,6 +26,8 @@ function startTimer() {
         }
     }, 1000);
 }
+
+
 
 function updateTimerDisplay() {
     const timerElement = document.getElementById('timer');
