@@ -24,19 +24,18 @@
     </div>
     <div class="container-main">
         <div class="wrapper">
-<!--            <button type="button" id = "list-score" class="btn btn-result flex-fill fw-bold p-2" data-bs-toggle="modal" data-bs-target="#resultModal">-->
-<!--                Danh sách điểm-->
-<!--            </button>-->
+            <button type="button" id = "list-score" class="btn btn-result flex-fill fw-bold p-2" data-bs-toggle="modal" data-bs-target="#resultModal">
+                <i class="fas fa-list"></i>
+            </button>
             <div class="container-info">
                 <h5 class="bungee-regular-title" id="team-name">*****</h5>
-                <h5 class="bungee-regular-title text-action" id="title"><i class="fas fa-hourglass-end"></i> <span id="timer">03:00</span></h5>
+                <h5 class="bungee-regular-title text-action" id="title"><i class="fas fa-hourglass-end"></i> <span class="bungee-regular-title" id="timer">03:00</span></h5>
             </div>
             <div class="container">
                 <div class="hangman-box">
                     <img src="img/hangman-0.svg" alt="hangman-img">
                     <h1 class="press-start-2p-regular">Hangman Game</h1>
                 </div>
-
                 <div class="game-box">
                     <ul class="word-display">
                         <!-- <li class="letter"></li>
@@ -64,8 +63,8 @@
                 <thead>
                 <tr>
                     <th scope="col"><img width="32" height="32" src="https://img.icons8.com/pulsar-color/48/rank.png" alt="rank"/></th>
-                    <th scope="col">Tên</th>
-                    <th scope="col">Điểm</th>
+                    <th class="bungee-regular-purple" scope="col">Tên</th>
+                    <th class="bungee-regular-purple" scope="col">Điểm</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -79,36 +78,34 @@
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header border-0">
-                    <h5 class="modal-title text-center w-100" id="resultModalLabel">Kết quả</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title text-center w-100 bungee-regular-normal-purple" id="resultModalLabel">Danh sách điểm</h5>
                 </div>
                 <div class="modal-body">
                     <table class="table">
                         <thead>
-                            <tr>
-                                <th scope="col"><img width="32" height="32" src="https://img.icons8.com/pulsar-color/48/rank.png" alt="rank"/></th>
-                                <th scope="col">Tên</th>
-                                <th scope="col">Điểm</th>
-                            </tr>
+                        <tr>
+                            <th scope="col"><img width="32" height="32" src="https://img.icons8.com/pulsar-color/48/rank.png" alt="rank"/></th>
+                            <th class="bungee-regular-purple" scope="col">Tên</th>
+                            <th class="bungee-regular-purple" scope="col">Điểm</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <!-- This will be populated by updateLeaderboard -->
+                        <!-- This will be populated by updateLeaderboard -->
                         </tbody>
                     </table>
                 </div>
                 <div class="modal-footer border-0 d-flex justify-content-center">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-secondary text-action btn-action" data-bs-dismiss="modal">Đóng</button>
                 </div>
             </div>
         </div>
     </div>
 <!--    Modal Alert Game-->
-    <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+    <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" data-bs-target="static" data-bs-keyboard="false" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xs">
             <div class="modal-content">
                 <div class="modal-header border-0">
                     <h5 class="modal-title text-center w-100 bungee-regular-normal-purple" id="alertModalLabel">Kết thúc lượt chơi</h5>
-                    <button type="button" class="btn-closed" data-bs-dismiss="modal" aria-label="Close"><img width="32" height="32" src="https://img.icons8.com/pieces/64/x-coordinate.png" alt="x-coordinate"/></button>
                 </div>
                 <div class="modal-body d-flex justify-content-center">
                     <div class="body-content d-flex justify-content-center flex-column w-50"></div>

@@ -67,6 +67,11 @@
                     <input type="text" class="form-control" id="limitedTime" placeholder="Nhập thời gian chơi mỗi vòng" required>
                     <div class="error" id="limitedTimeError"></div>
                 </div>
+                <div class="form-group m-3">
+                    <label for="limitedReasoning">Giới hạn số lần suy đoán</label>
+                    <input type="text" class="form-control" id="limitedReasoning" placeholder="Nhập giới hạn suy đoán sai cho mỗi vòng" required>
+                    <div class="error" id="limitedReasoningError"></div>
+                </div>
             </div>
             <div id="page-two" class="page d-none">
                 <div id="teamNameFields" class="overflow-auto"></div>
@@ -75,7 +80,7 @@
         </div>
         <div class="modal-footer border-0 d-flex justify-content-center">
           <button type="button" class="btn btn-primary text-action btn-action" id="nextBtn">Tiếp theo</button>
-            <button type="button" class="btn btn-primary text-action btn-action d-none" id="startBtn">Bắt đầu</button>
+          <button type="button" class="btn btn-primary text-action btn-action d-none" id="startBtn">Bắt đầu</button>
         </div>
       </div>
     </div>
