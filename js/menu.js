@@ -4,11 +4,14 @@ $(document).ready(function(){
 	let limitedTime = $('#limitedTime');
 	let teamNumberError = $('#teamNumberError');
 	let limitedTimeError = $('#limitedTimeError');
+	let limitedReasoning = $('#limitedReasoning');
+	let limitedReasoningError = $('#limitedReasoningError')
     localStorage.clear();
     function setConfigData(){
         const configData = {
+			teamNumber: teamNumber.val(),
             timeLimit: limitedTime.val(),
-            teamNumber: teamNumber.val()
+            reasonLimit: limitedReasoning.val()
         }
         localStorage.setItem("configData", JSON.stringify(configData));
     }
@@ -38,12 +41,23 @@ $(document).ready(function(){
 				limitedTimeError.show();
 				limitedTimeError.text("Vui lòng nhập thời gian.")
 				isValid = false;
-			}else if(teamNumber.val() < 1 || teamNumber.val() > 10){
+			}else if(limitedTime.val() < 1 || limitedTime.val() > 10){
 				limitedTimeError.show();
 				limitedTimeError.text("Giới hạn thời gian phải từ 1 đến 10 phút");
 				isValid = false;
 			}else{
 				limitedTimeError.hide();
+			}
+			if(limitedReasoning.val() === ""){
+				limitedReasoningError.show();
+				limitedReasoningError.text("Vui lòng nhập số lần suy đoán không chính xác")
+				isValid = false;
+			}else if(limitedReasoning.val() < 3 || limitedReasoning.val() > 9){
+				limitedReasoningError.show();
+				limitedReasoningError.text("Số lần suy đoán không chính xác phải từ 3 lần đến 9 lần")
+				isValid = false;
+			}else{
+				limitedReasoningError.hide();
 			}
         if(isValid){
 			if(currentPage === 1){

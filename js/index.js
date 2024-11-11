@@ -6,14 +6,20 @@ const wordDisplay = document.querySelector(".word-display");
 const guessesText = document.querySelector(".guesses-text b");
 const keyboardDiv = document.querySelector(".keyboard");
 let currentWord, correctLetters = [], wrongGuessCount = 0;
-const maxGuesses = 6;
 const gameModal = document.querySelector(".game-modal");
 const playAgainBtn = document.querySelector(".play-again");
-
+const listScoreBtn = document.querySelector(".btn-result");
 let teams = JSON.parse(localStorage.getItem('teamsData')) || [];
 let time = JSON.parse(localStorage.getItem('configData')) || [];
 let currentTeamIndex = 0;
+const maxGuesses = time.reasonLimit;
 let roundTimer;
+
+let prize1 ="<img width=\"24\" height=\"24\" src=\"https://img.icons8.com/color/48/first-place-ribbon.png\" alt=\"first-place-ribbon\"/>"
+let prize2 = "<img width=\"24\" height=\"24\" src=\"https://img.icons8.com/color/48/second-place-ribbon.png\" alt=\"second-place-ribbon\"/>"
+let prize3 = "<img width=\"24\" height=\"24\" src=\"https://img.icons8.com/color/48/third-place-ribbon.png\" alt=\"third-place-ribbon\"/>"
+let prize4 = "<img width=\"24\" height=\"24\" src=\"https://img.icons8.com/color/48/prize.png\" alt=\"prize\"/>"
+let prize5 = "<img width=\"24\" height=\"24\" src=\"https://img.icons8.com/fluency/48/prize--v1.png\" alt=\"prize--v1\"/>"
 
 const resetGame = () => {
     correctLetters = [];
@@ -180,11 +186,6 @@ const gameOver = (isWin) => {
         resetGame(); 
     }, 300);
 };
-let prize1 ="<img width=\"24\" height=\"24\" src=\"https://img.icons8.com/color/48/first-place-ribbon.png\" alt=\"first-place-ribbon\"/>"
-let prize2 = "<img width=\"24\" height=\"24\" src=\"https://img.icons8.com/color/48/second-place-ribbon.png\" alt=\"second-place-ribbon\"/>"
-let prize3 = "<img width=\"24\" height=\"24\" src=\"https://img.icons8.com/color/48/third-place-ribbon.png\" alt=\"third-place-ribbon\"/>"
-let prize4 = "<img width=\"24\" height=\"24\" src=\"https://img.icons8.com/color/48/prize.png\" alt=\"prize\"/>"
-let prize5 = "<img width=\"24\" height=\"24\" src=\"https://img.icons8.com/fluency/48/prize--v1.png\" alt=\"prize--v1\"/>"
 function getPrizeIcon(index) {
     switch (index) {
         case 0: return prize1;
@@ -205,14 +206,33 @@ function updateLeaderboard() {
             const row = document.createElement('tr');
             row.innerHTML = `
             <th scope="row">${getPrizeIcon(index)}</th>
-            <td>${team.name}</td>
-            <td>${team.score}</td>
+            <td class="bungee-regular-purple">${team.name}</td>
+            <td class="bungee-regular-purple">${team.score}</td>
         `;
             leaderboardBody.appendChild(row);
         });
         localStorage.setItem('teamsData', JSON.stringify(teams));
 }
+function updateLeaderboardModal() {
+    const teams = JSON.parse(localStorage.getItem('teamsData'));
+    teams.sort((a, b) => b.score - a.score);
+    const leaderboardBody = document.querySelector('.modal-body table tbody');
+    leaderboardBody.innerHTML = '';
 
+    teams.forEach((team, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <th scope="row">${getPrizeIcon(index)}</th>
+            <td class="bungee-regular-purple">${team.name}</td>
+            <td class="bungee-regular-purple">${team.score}</td>
+        `;
+        leaderboardBody.appendChild(row);
+    });
+    localStorage.setItem('teamsData', JSON.stringify(teams));
+}
+listScoreBtn.addEventListener("click", () => {
+    updateLeaderboardModal();
+});
 function startRound() {
     clearTimeout(roundTimer); // Xóa roundTimer cũ nếu có
     currentTeamIndex = parseInt(localStorage.getItem('currentTeamIndex')) || 0;
