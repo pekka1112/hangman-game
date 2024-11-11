@@ -18,6 +18,7 @@ let roundTimer;
 const resetGame = () => {
     correctLetters = [];
     wrongGuessCount = 0;
+    localStorage.setItem('wrongGuessCount', wrongGuessCount);
     guessesText.innerText = `${wrongGuessCount} / ${maxGuesses}`;
     hangmanImage.src = `img/hangman-${wrongGuessCount}.svg`;
     gameModal.classList.remove("show");
@@ -56,6 +57,7 @@ const initGame = (button, clickedLetter) => {
         });
     } else {
         wrongGuessCount++;
+        localStorage.setItem('wrongGuessCount', wrongGuessCount);
         hangmanImage.src = `img/hangman-${wrongGuessCount}.svg`;
     }
 
@@ -101,6 +103,7 @@ const handleTeamLoss = () => {
             $('#confirmBtn').on('click', function (){
                 $('#alertModal').modal('hide');
                 currentTeamIndex++;
+                localStorage.setItem('currentTeamIndex', currentTeamIndex);
                 startRound();
             });
         } else {
@@ -126,18 +129,16 @@ for (let i = 97; i <= 122; i++) {
 
 playAgainBtn.addEventListener("click", () => {
     const currentTeam = teams[currentTeamIndex];
-    
-    
+
     if (currentTeamIndex < teams.length - 1) {
         currentTeamIndex++;
-        resetGame(); 
-        getRandomWord();  
     } else {
-    
         currentTeamIndex = 0; 
-        resetGame();
-        getRandomWord();
+       
     }
+    localStorage.setItem('currentTeamIndex', currentTeamIndex); 
+    resetGame();
+    getRandomWord();
 });
 
 const gameOver = (isWin) => { 
@@ -214,13 +215,14 @@ function updateLeaderboard() {
 
 function startRound() {
     clearTimeout(roundTimer); // Xóa roundTimer cũ nếu có
+    currentTeamIndex = parseInt(localStorage.getItem('currentTeamIndex')) || 0;
     if (currentTeamIndex < teams.length) {
         document.querySelector('#team-name').innerText = teams[currentTeamIndex].name;
         resetGame();
         getRandomWord();
         resetKeyboard();
 
-        wrongGuessCount = 0;
+        wrongGuessCount = parseInt(localStorage.getItem('wrongGuessCount')) || 0;   
         guessesText.innerText = `${wrongGuessCount} / ${maxGuesses}`;
         hangmanImage.src = `img/hangman-${wrongGuessCount}.svg`;
 
