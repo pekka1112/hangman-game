@@ -12,7 +12,7 @@ const listScoreBtn = document.querySelector(".btn-result");
 let teams = JSON.parse(localStorage.getItem('teamsData')) || [];
 let time = JSON.parse(localStorage.getItem('configData')) || [];
 let currentTeamIndex = 0;
-const maxGuesses = time.reasonLimit;
+const maxGuesses = parseInt(time.reasonLimit);
 let roundTimer;
 
 let prize1 ="<img width=\"24\" height=\"24\" src=\"https://img.icons8.com/color/48/first-place-ribbon.png\" alt=\"first-place-ribbon\"/>"
@@ -23,8 +23,8 @@ let prize5 = "<img width=\"24\" height=\"24\" src=\"https://img.icons8.com/fluen
 
 const resetGame = () => {
     correctLetters = [];
-    wrongGuessCount = 0;
-    localStorage.setItem('wrongGuessCount', wrongGuessCount);
+    wrongGuessCount = parseInt(localStorage.getItem('reasonLimit')) || 0;
+    localStorage.setItem('reasonLimit', wrongGuessCount);
     guessesText.innerText = `${wrongGuessCount} / ${maxGuesses}`;
     hangmanImage.src = `img/hangman-${wrongGuessCount}.svg`;
     gameModal.classList.remove("show");
@@ -63,7 +63,7 @@ const initGame = (button, clickedLetter) => {
         });
     } else {
         wrongGuessCount++;
-        localStorage.setItem('wrongGuessCount', wrongGuessCount);
+        localStorage.setItem('reasonLimit', wrongGuessCount);
         hangmanImage.src = `img/hangman-${wrongGuessCount}.svg`;
     }
 
@@ -92,7 +92,8 @@ const handleTeamLoss = () => {
     const currentTeam = teams[currentTeamIndex];
     currentTeam.roundsPlayed++;
     localStorage.setItem('teamsData', JSON.stringify(teams));
-
+    // Đánh dấu trò chơi đang diễn ra cho đội tiếp theo
+    localStorage.setItem('isGameOngoing', 'false');
 
     setTimeout(() => {
         if (currentTeamIndex < teams.length - 1) {
@@ -110,6 +111,8 @@ const handleTeamLoss = () => {
                 $('#alertModal').modal('hide');
                 currentTeamIndex++;
                 localStorage.setItem('currentTeamIndex', currentTeamIndex);
+                const timeLimit = time.timeLimit * 60;
+                localStorage.setItem("timeLeft", timeLimit);
                 startRound();
             });
         } else {
@@ -234,23 +237,28 @@ listScoreBtn.addEventListener("click", () => {
     updateLeaderboardModal();
 });
 function startRound() {
-    clearTimeout(roundTimer); // Xóa roundTimer cũ nếu có
+    clearTimeout(roundTimer);
     currentTeamIndex = parseInt(localStorage.getItem('currentTeamIndex')) || 0;
+
+    if (localStorage.getItem('isGameOngoing') === 'false') {
+        wrongGuessCount = 0;  // Đặt lại số lần sai về 0
+        localStorage.setItem('reasonLimit', wrongGuessCount);  // Lưu lại số lần sai trong localStorage
+        localStorage.setItem('isGameOngoing', 'true');  // Đánh dấu trò chơi đang diễn ra
+    }
+
+
     if (currentTeamIndex < teams.length) {
         document.querySelector('#team-name').innerText = teams[currentTeamIndex].name;
         resetGame();
         getRandomWord();
         resetKeyboard();
 
-        wrongGuessCount = parseInt(localStorage.getItem('wrongGuessCount')) || 0;   
         guessesText.innerText = `${wrongGuessCount} / ${maxGuesses}`;
         hangmanImage.src = `img/hangman-${wrongGuessCount}.svg`;
 
-        if (!localStorage.getItem("timeLeft")) {
-            localStorage.setItem("timeLeft", time.timeLimit * 60);
-        }
 
-        startTimer(); 
+        startTimer();
+
 
         roundTimer = setTimeout(() => {
             handleTeamLoss(); 
