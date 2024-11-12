@@ -1,7 +1,7 @@
 export const fetchData = async () => {
     let wordList = [];
     try {
-        const response = await fetch('/server/action/get.php');
+        const response = await fetch('./server/action/get.php');
         if (response.status === 404) {
             throw new Error('Resource not found (404)');
         }
