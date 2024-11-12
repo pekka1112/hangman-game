@@ -3,30 +3,31 @@ let timeLeft;
 const dataConfig = JSON.parse(localStorage.getItem("configData"));
 
 function startTimer() {
-    clearInterval(timer); // Xóa timer cũ trước khi tạo mới
+    clearInterval(timer);
 
     const storedTimeLeft = localStorage.getItem("timeLeft");
     const storedTimeLimit = dataConfig ? dataConfig.timeLimit : null;
-    
-    timeLeft = storedTimeLeft !== null 
-        ? parseInt(storedTimeLeft) 
+
+    // Load existing timeLeft or initialize to config limit
+    timeLeft = storedTimeLeft !== null
+        ? parseInt(storedTimeLeft)
         : (storedTimeLimit ? parseInt(storedTimeLimit) * 60 : 180);
 
     updateTimerDisplay();
 
+    // Countdown and update localStorage
     timer = setInterval(() => {
         if (timeLeft <= 0) {
             clearInterval(timer);
-            localStorage.removeItem("timeLeft"); 
+            localStorage.removeItem("timeLeft");
             handleTeamLoss();
         } else {
             timeLeft--;
-            localStorage.setItem("timeLeft", timeLeft); 
+            localStorage.setItem("timeLeft", timeLeft);
             updateTimerDisplay();
         }
     }, 1000);
 }
-
 
 
 function updateTimerDisplay() {
