@@ -1,4 +1,4 @@
-import {fetchData} from "/js/wordList.js";
+import {fetchData} from "../js/wordList.js";
 
 let wordList = [];
 const hangmanImage = document.querySelector(".hangman-box img");
