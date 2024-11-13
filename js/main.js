@@ -36,7 +36,11 @@ const resetKeyboard = () => {
         button.disabled = false;  
     });
 };
-
+const disableKeyboard = () => {
+    keyboardDiv.querySelectorAll("button").forEach(button => {
+        button.disabled = true;
+    });
+}
 const getRandomWord = async () => {
     wordList = await fetchData();
     const { word, hint } = wordList[Math.floor(Math.random() * wordList.length)];
@@ -72,6 +76,7 @@ const initGame = (button, clickedLetter) => {
     guessesText.innerText = `${wrongGuessCount} / ${maxGuesses}`;
 
     if (wrongGuessCount === maxGuesses) {
+        disableKeyboard();
         handleTeamLoss();
         return; 
     }
@@ -87,8 +92,6 @@ const initGame = (button, clickedLetter) => {
         }, 1000);
     }
 }
-
-
 const handleTeamLoss = () => {
     const currentTeam = teams[currentTeamIndex];
     currentTeam.roundsPlayed++;
@@ -103,11 +106,6 @@ const handleTeamLoss = () => {
                 <p class="final-score text-center bungee-regular-normal">${teams[currentTeamIndex].score} </p>
                 <p class="text-center bungee-regular">Đội tiếp theo là ${teams[currentTeamIndex+1].name} </p>`);
             $('#alertModal').modal('show');
-            // const proceed = true;
-            // if (proceed) {
-            //     currentTeamIndex++;
-            //     startRound();
-            // }
             $('#confirmBtn').on('click', function (){
                 $('#alertModal').modal('hide');
                 currentTeamIndex++;
@@ -122,24 +120,15 @@ const handleTeamLoss = () => {
     }, 1000);
 };
 
-
-// const showLostTurnModal = () => {
-//     gameModal.querySelector("img").src = `img/lost.gif`;
-//     gameModal.querySelector("h4").innerText = "Thất bại!";
-//     gameModal.querySelector("p").innerHTML = "Bạn đã đoán sai quá nhiều. Đến lượt đội tiếp theo!";
-//     gameModal.classList.add("show");
-// }
-
 for (let i = 97; i <= 122; i++) {
     const button = document.createElement('button');
+    button.classList.add('btn-pick');
     button.innerText = String.fromCharCode(i);
     keyboardDiv.appendChild(button);
     button.addEventListener("click", e => initGame(button, String.fromCharCode(i))); 
 }
 
 playAgainBtn.addEventListener("click", () => {
-    const currentTeam = teams[currentTeamIndex];
-
     if (currentTeamIndex < teams.length - 1) {
         currentTeamIndex++;
     } else {
@@ -151,45 +140,6 @@ playAgainBtn.addEventListener("click", () => {
     getRandomWord();
 });
 
-const gameOver = (isWin) => { 
-    const currentTeam = teams[currentTeamIndex];
-    clearTimeout(roundTimer); 
-
-    setTimeout(() => {
-        const modalText = isWin ? "Bạn đã tìm thấy từ:" : "Từ đúng là:";
-        gameModal.querySelector("img").src = `img/${isWin ? "victory" : "lost"}.gif`;
-        gameModal.querySelector("h4").innerText = `${isWin ? "Chiến thắng!" : "Thất bại!"}`;
-        gameModal.querySelector("p").innerHTML = `${modalText} <b>${currentWord}</b>`;
-        gameModal.classList.add("show");
-
-        currentTeam.roundsPlayed++;
-        localStorage.setItem('teamsData', JSON.stringify(teams));
-
-        setTimeout(() => {
-            if (currentTeamIndex < teams.length - 1) {
-                // const proceed = confirm("Đội tiếp theo có muốn chơi không?");
-                $('#alertModal .modal-body .body-content').html(`
-                    <p class="final-score text-center bungee-regular-normal">${teams[currentTeamIndex].score} </p>
-                    <p class="text-center bungee-regular">Đội tiếp theo là ${teams[currentTeamIndex+1].name} </p>`);
-                $('#alertModal').modal('show');
-                // const proceed = true;
-                // if (proceed) {
-                //     currentTeamIndex++;
-                //     startRound();
-                // }
-                $('#confirmBtn').on('click', function (){
-                    $('#alertModal').modal('hide');
-                    currentTeamIndex++;
-                    startRound();
-                });
-            } else {
-                checkForTies();
-            }
-        }, 1000);
-
-        resetGame(); 
-    }, 300);
-};
 function getPrizeIcon(index) {
     switch (index) {
         case 0: return prize1;
@@ -210,8 +160,8 @@ function updateLeaderboard() {
             const row = document.createElement('tr');
             row.innerHTML = `
             <th scope="row">${getPrizeIcon(index)}</th>
-            <td class="bungee-regular-purple">${team.name}</td>
-            <td class="bungee-regular-purple">${team.score}</td>
+            <td class="bungee-regular">${team.name}</td>
+            <td class="bungee-regular">${team.score}</td>
         `;
             leaderboardBody.appendChild(row);
         });
@@ -227,8 +177,8 @@ function updateLeaderboardModal() {
         const row = document.createElement('tr');
         row.innerHTML = `
             <th scope="row">${getPrizeIcon(index)}</th>
-            <td class="bungee-regular-purple">${team.name}</td>
-            <td class="bungee-regular-purple">${team.score}</td>
+            <td class="bungee-regular">${team.name}</td>
+            <td class="bungee-regular">${team.score}</td>
         `;
         leaderboardBody.appendChild(row);
     });
@@ -242,11 +192,10 @@ function startRound() {
     currentTeamIndex = parseInt(localStorage.getItem('currentTeamIndex')) || 0;
 
     if (localStorage.getItem('isGameOngoing') === 'false') {
-        wrongGuessCount = 0;  // Đặt lại số lần sai về 0
-        localStorage.setItem('reasonLimit', wrongGuessCount);  // Lưu lại số lần sai trong localStorage
-        localStorage.setItem('isGameOngoing', 'true');  // Đánh dấu trò chơi đang diễn ra
+        wrongGuessCount = 0;
+        localStorage.setItem('reasonLimit', wrongGuessCount);
+        localStorage.setItem('isGameOngoing', 'true');
     }
-
 
     if (currentTeamIndex < teams.length) {
         document.querySelector('#team-name').innerText = teams[currentTeamIndex].name;
@@ -256,23 +205,13 @@ function startRound() {
 
         guessesText.innerText = `${wrongGuessCount} / ${maxGuesses}`;
         hangmanImage.src = `img/hangman-${wrongGuessCount}.svg`;
-
-
         startTimer();
-
-
         roundTimer = setTimeout(() => {
             handleTeamLoss(); 
         }, timeLeft * 1000); 
     } else {
         checkForTies(); 
     }
-}
-
-
-
-function checkTeamWin() {
-    return correctLetters.length === new Set(currentWord).size;
 }
 
 function checkForTies() {
@@ -294,10 +233,9 @@ function checkForTies() {
                 <p class="text-center bungee-regular">Tất cả các đội đều hoà</p>`);
         $('#alertModal').modal('show');
     } else {
-        // alert(`Cuộc chơi đã kết thúc! Đội chiến thắng là ${highestScoreTeam.name} với ${highestScore} điểm!`);
         $('#alertModal .modal-body .body-content').html(`
                     <p class="final-score text-center bungee-regular-normal">${highestScore} </p>
-                    <p class="text-center bungee-regular">Đội chiến thắng là <span class="bungee-regular-purple">${highestScoreTeam.name}</span> </p>`);
+                    <p class="text-center bungee-regular">Đội chiến thắng là <span class="bungee-regular">${highestScoreTeam.name}</span> </p>`);
         $('#alertModal').modal('show');
     }
     resetGame();
@@ -307,7 +245,9 @@ function checkForTies() {
         $('#alertModal').modal('hide');
         window.location.href = "index.html";
     });
-
 }
+$('#return-menu').on('click', function (){
+    window.location.href = "index.html";
+});
 updateLeaderboard();
 startRound();

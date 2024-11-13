@@ -1,4 +1,5 @@
 import { rovingIndex } from 'https://cdn.skypack.dev/roving-ux';
+
 $(document).ready(function(){
 	let teamNumber = $('#teamNumber');
 	let limitedTime = $('#limitedTime');
@@ -228,12 +229,6 @@ function start() {
 }
 start();
 const index = document.querySelector('.threeD-button-set');
-// let menuRect = menu.getBoundingClientRect();
-
-// window.addEventListener('resize', () => {
-// 	menuRect = menu.getBoundingClientRect();
-// });
-// Kiểm tra nếu người dùng không yêu cầu giảm chuyển động
 const { matches: motionOK } = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 rovingIndex({
@@ -250,7 +245,6 @@ if (!motionOK) {
 			index.style.setProperty('--y', `${dx / 20}deg`);
 	});
 }
-// Hàm tính toán góc theo vị trí chuột
 function getAngles(clientX, clientY ,rect) {
 	const { x, y, width, height } = rect;
 
@@ -260,6 +254,3 @@ function getAngles(clientX, clientY ,rect) {
 	return { dx, dy };
 }
 
-
-
-// document.getElementById("body").addEventListener("click", start);

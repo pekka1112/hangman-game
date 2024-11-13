@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Not Found</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <!--CSS-->
+    <link rel="stylesheet" href="css/notfound.css">
+  <script src="js/notfound.js" async></script>
+</head>
+<body>
+<div id='oopss'>
+  <div id='error-text'>
+    <img src="https://cdn.rawgit.com/ahmedhosna95/upload/1731955f/sad404.svg" alt="404">
+    <span>404 PAGE</span>
+    <p class="p-a">
+      . Bạn đang ngoại tuyến, vui lòng kiểm tra đường truyền mạng</p>
+    <p class="p-b">
+      ... Trở về trang trước đó
+    </p>
+    <a href='index.html' class="back">... Trở về trang trước</a>
+  </div>
+</div>
+<script async>
+  window.addEventListener('load', () => {
+    if(navigator.onLine){
+      window.location.href = 'index.html';
+    }
+  });
+  window.addEventListener('online', () => {
+    window.location.href = 'index.html';
+  });
+</script>
+</body>
+</html>
